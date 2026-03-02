@@ -6,6 +6,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Toaster } from "sonner";
 import { AppSidebar } from "@/components/AppSidebar";
 import { headers } from "next/headers";
+import { AppFooter } from "@/components/layout/AppFooter";
+import { PageTransition } from "@/components/layout/PageTransition";
 
 const appFont = localFont({
   src: [
@@ -17,8 +19,19 @@ const appFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "EnglishCourse",
-  description: "Learn English with lessons, practice, and progress tracking.",
+  metadataBase: new URL("https://english-course.example.com"),
+  title: {
+    default: "EnglishCourse — Learn English with modern lessons",
+    template: "%s | EnglishCourse",
+  },
+  description:
+    "Learn English with structured courses, interactive lessons, and progress tracking in a production-grade learning platform.",
+  keywords: ["English learning", "online courses", "grammar", "vocabulary", "speaking"],
+  openGraph: {
+    title: "EnglishCourse",
+    description: "Interactive English learning platform with course progress and quizzes.",
+    type: "website",
+  },
 };
 
 function getActiveCourseSlugFromPath(path: string) {
@@ -33,9 +46,9 @@ function getActiveCourseSlugFromPath(path: string) {
 
 export default async function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const supabase = await createSupabaseServer();
   const { data } = await supabase.auth.getUser();
 
@@ -44,27 +57,33 @@ export default async function RootLayout({
   const activeCourseSlug = getActiveCourseSlugFromPath(pathname);
 
   return (
-    <html lang="ru">
-      <body className="min-h-screen bg-[#030303] text-white">
+    <html lang="ru" suppressHydrationWarning>
+      <body className={`${appFont.variable} min-h-screen bg-app text-app antialiased`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+              try {
+                const t = localStorage.getItem('ec-theme');
+                if (t === 'light') document.documentElement.classList.remove('dark');
+                else document.documentElement.classList.add('dark');
+              } catch {}
+            })();`,
+          }}
+        />
         <AppSidebar activeCourseSlug={activeCourseSlug} pathname={pathname} />
 
-        <div className="lg:pl-[288px] min-h-screen">
+        <div className="lg:pl-[288px] min-h-screen flex flex-col">
           <SiteHeader userEmail={data.user?.email ?? null} />
 
-          <main className="min-h-[calc(100vh-64px)]">
+          <main className="min-h-[calc(100vh-64px)] flex-1">
             <div className="px-4 sm:px-6 lg:px-10">
-              <div className="mx-auto max-w-6xl py-10">{children}</div>
+              <div className="mx-auto max-w-6xl py-10">
+                <PageTransition>{children}</PageTransition>
+              </div>
             </div>
           </main>
 
-          <footer className="border-t border-white/10 bg-black/50 backdrop-blur">
-            <div className="px-4 sm:px-6 lg:px-10">
-              <div className="mx-auto max-w-6xl py-8 text-sm text-white/55 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
-                <span>© {new Date().getFullYear()} EnglishCourse</span>
-                <span className="text-white/35">Built with Next.js + Supabase</span>
-              </div>
-            </div>
-          </footer>
+          <AppFooter />
         </div>
 
         <Toaster richColors position="top-right" />
