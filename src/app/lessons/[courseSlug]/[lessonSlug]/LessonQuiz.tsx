@@ -160,7 +160,7 @@ export function LessonQuiz({
   return (
     <section className="space-y-4">
       {/* Header */}
-      <Card className="noise overflow-hidden p-0 border border-zinc-200 dark:border-zinc-800 shadow-sm rounded-3xl">
+      <Card className="noise overflow-hidden rounded-2xl border border-app bg-card p-0 shadow-sm backdrop-blur-sm">
         <div className="p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
@@ -179,7 +179,7 @@ export function LessonQuiz({
                 )}
               </div>
 
-              <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="mt-3 text-sm text-secondary">
                 Отмечай ответы — прогресс появится сразу. Когда все проверены,
                 можно завершать урок.
               </p>
@@ -210,17 +210,17 @@ export function LessonQuiz({
 
           {/* Progress bar */}
           <div className="mt-6">
-            <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-soft">
               <motion.div
-                className="h-full rounded-full bg-zinc-900 dark:bg-zinc-50"
+                className="h-full rounded-full bg-[rgba(255,255,255,0.14)]"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPct}%` }}
                 transition={{ type: "spring", stiffness: 140, damping: 18 }}
               />
             </div>
-            <div className="mt-2 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+            <div className="mt-2 flex items-center justify-between text-xs text-secondary">
               <span>Progress</span>
-              <span className="font-medium text-zinc-900 dark:text-zinc-50">{progressPct}%</span>
+              <span className="font-medium text-primary">{progressPct}%</span>
             </div>
           </div>
 
@@ -231,15 +231,15 @@ export function LessonQuiz({
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
-                className="mt-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4 backdrop-blur"
+                className="mt-5 rounded-2xl border border-app bg-soft p-4 backdrop-blur"
               >
                 <div className="flex items-start gap-3">
-                  <Lock className="mt-0.5 h-4 w-4 text-zinc-500" />
+                  <Lock className="mt-0.5 h-4 w-4 text-secondary" />
                   <div>
-                    <div className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+                    <div className="text-sm font-semibold text-primary">
                       Гость-режим
                     </div>
-                    <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                    <div className="mt-1 text-xs text-secondary">
                       Войди, чтобы сохранять score и отмечать урок как Done.
                     </div>
                   </div>
@@ -250,15 +250,15 @@ export function LessonQuiz({
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
-                className="mt-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4 backdrop-blur"
+                className="mt-5 rounded-2xl border border-app bg-soft p-4 backdrop-blur"
               >
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-4 w-4 text-amber-500" />
                   <div>
-                    <div className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+                    <div className="text-sm font-semibold text-primary">
                       Проверь все упражнения
                     </div>
-                    <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                    <div className="mt-1 text-xs text-secondary">
                       Сейчас проверено {checkedCount} из {total}. Когда будет{" "}
                       {total}/{total} — кнопка станет активной.
                     </div>
@@ -270,15 +270,15 @@ export function LessonQuiz({
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
-                className="mt-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4 backdrop-blur"
+                className="mt-5 rounded-2xl border border-app bg-soft p-4 backdrop-blur"
               >
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-500" />
                   <div>
-                    <div className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+                    <div className="text-sm font-semibold text-primary">
                       Всё готово
                     </div>
-                    <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                    <div className="mt-1 text-xs text-secondary">
                       Нажми “Завершить урок”, чтобы сохранить результат и получить
                       Done.
                     </div>
@@ -340,13 +340,13 @@ export function LessonQuiz({
         <div className="pointer-events-auto mx-auto max-w-3xl">
           <div
             className={cn(
-              "noise flex items-center justify-between gap-3 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 p-3 shadow-[0_18px_45px_rgba(0,0,0,0.05)] backdrop-blur-lg",
+              "noise flex items-center justify-between gap-3 rounded-2xl border border-app bg-card p-3 shadow-[0_18px_45px_rgba(0,0,0,0.35)] backdrop-blur-lg",
               "md:hidden"
             )}
           >
             <div className="min-w-0 pl-1">
-              <div className="text-xs text-zinc-500 dark:text-zinc-400">Score</div>
-              <div className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+              <div className="text-xs text-secondary">Score</div>
+              <div className="text-sm font-semibold text-primary">
                 {correctCount}/{total} • {score}%
               </div>
             </div>

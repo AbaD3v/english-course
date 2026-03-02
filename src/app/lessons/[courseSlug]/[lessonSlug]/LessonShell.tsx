@@ -296,7 +296,7 @@ export default function LessonShell({
           onMouseDown={startDrag}
           aria-hidden
         >
-          <div className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 transition-colors group-hover:bg-zinc-300" />
+          <div className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 transition-colors group-hover:bg-[rgba(255,255,255,0.12)]" />
         </div>
 
         <main className="h-full overflow-y-auto p-4 md:p-6 space-y-6">
@@ -414,7 +414,7 @@ export default function LessonShell({
               <div className="space-y-4">
                 {practiceBlocks.length ? (
                   <>
-                    <div className="text-sm text-zinc-700">
+                    <div className="text-sm text-secondary">
                       Сделай упражнения и нажми <b>Практика пройдена</b>, чтобы
                       открыть Quiz.
                     </div>
