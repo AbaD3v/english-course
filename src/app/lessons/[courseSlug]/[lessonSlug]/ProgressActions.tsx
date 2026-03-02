@@ -1,12 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2, CheckCircle2, CircleDashed, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type Status = "not_started" | "in_progress" | "done";
+
+const COMPLETED_KEY = "ec-completed-lessons";
+
+function readCompletedLessons(): string[] {
+  try {
+    const raw = localStorage.getItem(COMPLETED_KEY);
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((item): item is string => typeof item === "string");
+  } catch {
+    return [];
+  }
+}
+
+function updateCompletedLessons(lessonId: string, done: boolean) {
+  const current = new Set(readCompletedLessons());
+  if (done) current.add(lessonId);
+  else current.delete(lessonId);
+  localStorage.setItem(COMPLETED_KEY, JSON.stringify(Array.from(current)));
+}
 
 export function ProgressActions({
   lessonId,
@@ -17,6 +38,10 @@ export function ProgressActions({
 }) {
   const [status, setStatus] = useState<Status>(initialStatus);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (status === "done") updateCompletedLessons(lessonId, true);
+  }, [lessonId, status]);
 
   async function setProgress(next: Status) {
     if (loading) return;
@@ -36,6 +61,7 @@ export function ProgressActions({
     }
     
     setStatus(next);
+    updateCompletedLessons(lessonId, next === "done");
     if (next === "done") {
         toast.success("Урок отмечен как пройденный!");
     } else {
