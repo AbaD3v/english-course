@@ -72,10 +72,10 @@ export default async function CoursesPage() {
       </header>
 
       {!user && (
-        <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl">
+        <div className="rounded-2xl border border-zinc-200/70 bg-white/70 dark:bg-zinc-900/70 p-4 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-zinc-700">
-              Войди, чтобы сохранять прогресс.
+            <p className="text-sm text-zinc-700 dark:text-zinc-300">
+              Войдите, чтобы сохранять прогресс.
             </p>
             <Link
               href="/auth"
@@ -104,8 +104,8 @@ export default async function CoursesPage() {
                 key={course.id}
                 href={`/courses/${course.slug}`}
                 className={cn(
-                  "group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 p-5 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl",
-                  "transition will-change-transform hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-md",
+                  "group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 dark:bg-zinc-900/70 dark:border-zinc-800/70 p-5 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl",
+                  "transition will-change-transform hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-md dark:hover:bg-zinc-900/80 dark:hover:shadow-md",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/20"
                 )}
               >
@@ -118,15 +118,15 @@ export default async function CoursesPage() {
 
                 <div className="relative flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h2 className="truncate text-base font-semibold text-zinc-900">
+                    <h2 className="truncate text-base font-semibold text-zinc-900 dark:text-white">
                       {course.title}
                     </h2>
                     {course.description ? (
-                      <p className="mt-1 line-clamp-2 text-sm text-zinc-600">
+                      <p className="mt-1 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
                         {course.description}
                       </p>
                     ) : (
-                      <p className="mt-1 text-sm text-zinc-500">
+                      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
                         Без описания
                       </p>
                     )}
