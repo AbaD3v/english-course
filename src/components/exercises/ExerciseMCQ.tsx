@@ -47,7 +47,7 @@ export function ExerciseMCQ({
       animate={shake ? { x: [0, -8, 8, -6, 6, -3, 3, 0] } : { x: 0 }}
       transition={{ duration: 0.42 }}
     >
-      <Card className="noise overflow-hidden p-0 border-black/15 bg-white/90">
+      <Card className="noise overflow-hidden rounded-2xl border border-app bg-card p-0 backdrop-blur-sm">
         <div className="p-5">
           {/* Top line */}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -66,7 +66,7 @@ export function ExerciseMCQ({
                   Correct
                 </Badge>
               ) : (
-                <Badge className="border-red-200 bg-red-50 text-red-700 flex items-center gap-1">
+                <Badge className="flex items-center gap-1 border-red-500/40 bg-red-500/10 text-red-300">
                   <XCircle className="h-3.5 w-3.5" />
                   Wrong
                 </Badge>
@@ -79,7 +79,7 @@ export function ExerciseMCQ({
           </div>
 
           {/* Question */}
-          <div className="mt-3 text-lg font-semibold tracking-tight text-black">
+          <div className="mt-3 text-lg font-semibold tracking-tight text-primary">
             {question}
           </div>
 
@@ -91,13 +91,12 @@ export function ExerciseMCQ({
               const isWrongSelected = checked && isSelected && idx !== answerIndex;
 
               const base =
-                "group w-full text-left rounded-2xl border px-4 py-3 transition " +
-                "bg-white/70 backdrop-blur shadow-[0_12px_26px_rgba(0,0,0,0.06)]";
+                "group w-full text-left rounded-2xl border border-app bg-soft px-4 py-3 transition-colors duration-200";
 
-              const hover = !checked ? "hover:-translate-y-[1px] hover:shadow-[0_18px_40px_rgba(0,0,0,0.10)]" : "";
-              const ring = isSelected && !checked ? "ring-2 ring-black/15" : "";
-              const correctStyle = isCorrect ? "border-emerald-200 bg-emerald-50" : "";
-              const wrongStyle = isWrongSelected ? "border-red-200 bg-red-50" : "";
+              const hover = !checked ? "hover:bg-[rgba(255,255,255,0.04)] active:bg-[rgba(255,255,255,0.08)]" : "";
+              const ring = isSelected && !checked ? "ring-2 ring-white/20" : "";
+              const correctStyle = isCorrect ? "border-emerald-500/50 bg-emerald-500/10" : "";
+              const wrongStyle = isWrongSelected ? "border-red-500/50 bg-red-500/10" : "";
               const disabled = checked ? "cursor-default" : "cursor-pointer";
 
               return (
@@ -116,20 +115,20 @@ export function ExerciseMCQ({
                           ? "border-emerald-200 bg-emerald-100 text-emerald-700"
                           : isWrongSelected
                           ? "border-red-200 bg-red-100 text-red-700"
-                          : "border-black/10 bg-white/60 text-black/70"
+                          : "border-app bg-soft text-secondary"
                       )}
                     >
                       {letters[idx] ?? idx + 1}
                     </div>
 
                     <div className="min-w-0">
-                      <div className="text-base font-medium text-black/90">
+                      <div className="text-base font-medium text-primary">
                         {opt}
                       </div>
 
                       {/* subtle hint line */}
                       {!checked && isSelected ? (
-                        <div className="mt-1 text-sm text-black/60">
+                        <div className="mt-1 text-sm text-secondary">
                           Нажми “Проверить”, чтобы зафиксировать ответ.
                         </div>
                       ) : null}
@@ -154,7 +153,7 @@ export function ExerciseMCQ({
                       ) : checked && isWrongSelected ? (
                         <XCircle className="h-4 w-4 text-red-700" />
                       ) : (
-                        <span className="inline-block h-4 w-4 rounded-full border border-black/10 bg-white/60 opacity-0 transition group-hover:opacity-100" />
+                        <span className="inline-block h-4 w-4 rounded-full border border-app bg-soft opacity-0 transition group-hover:opacity-100" />
                       )}
                     </div>
                   </div>
@@ -191,7 +190,7 @@ export function ExerciseMCQ({
               )}
             </Button>
 
-            <div className="text-xs text-black/50">
+            <div className="text-xs text-secondary">
               {checked ? (
                 correct ? (
                   <span className="font-medium text-emerald-700">

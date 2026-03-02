@@ -1,9 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* @reference "tailwindcss";  <-- УБРАТЬ */
+
 :root {
-  --background: #0a0a0a;
+  --background: #030303;
+  --foreground: #f5f5f5;
+  --bg-main: #030303;
+  --bg-card: #0b0b0f;
+  --bg-soft: #111115;
+  --border-app: rgba(255, 255, 255, 0.06);
+  --hover-app: rgba(255, 255, 255, 0.04);
+  --text-primary: #f5f5f5;
+  --text-secondary: #a1a1aa;
+}
+
+html.dark {
+  --background: #030303;
   --foreground: #f5f5f5;
 }
 
@@ -11,18 +23,27 @@
   html,
   body {
     min-height: 100%;
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply antialiased text-neutral-100;
-    background-color: #030303;
+    @apply antialiased;
+    background-color: var(--background);
+    color: var(--foreground);
     background-image:
-      radial-gradient(900px 500px at 12% -8%, rgba(255, 255, 255, 0.13), transparent 55%),
-      radial-gradient(900px 500px at 88% -8%, rgba(255, 255, 255, 0.09), transparent 55%),
+      radial-gradient(900px 500px at 12% -8%, rgba(255, 255, 255, 0.08), transparent 55%),
+      radial-gradient(900px 500px at 88% -8%, rgba(255, 255, 255, 0.06), transparent 55%),
       linear-gradient(180deg, #070707 0%, #030303 45%, #020202 100%);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  html.dark body {
+    background-image:
+      radial-gradient(900px 500px at 12% -8%, rgba(255, 255, 255, 0.13), transparent 55%),
+      radial-gradient(900px 500px at 88% -8%, rgba(255, 255, 255, 0.09), transparent 55%),
+      linear-gradient(180deg, #070707 0%, #030303 45%, #020202 100%);
   }
 
   a {
@@ -51,10 +72,46 @@
     mix-blend-mode: soft-light;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
   }
+
+  .bg-app {
+    background-color: var(--background);
+  }
+
+  .text-app {
+    color: var(--foreground);
+  }
+
+  .bg-main {
+    background-color: var(--bg-main);
+  }
+
+  .bg-card {
+    background-color: var(--bg-card);
+  }
+
+  .bg-soft {
+    background-color: var(--bg-soft);
+  }
+
+  .border-app {
+    border-color: var(--border-app);
+  }
+
+  .hover-app:hover {
+    background-color: var(--hover-app);
+  }
+
+  .text-primary {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
 }
 
 :focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.45);
+  outline: 2px solid rgba(80, 120, 255, 0.7);
   outline-offset: 2px;
   border-radius: 10px;
 }
@@ -65,16 +122,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.14);
   border-radius: 999px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  border: 2px solid transparent;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.22) rgba(255, 255, 255, 0.03);
+  scrollbar-color: rgba(255, 255, 255, 0.14) rgba(255, 255, 255, 0.02);
 }

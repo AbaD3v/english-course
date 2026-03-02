@@ -72,7 +72,7 @@ export function ExerciseInput({
         Correct
       </Badge>
     ) : (
-      <Badge className="border-red-200 bg-red-50 text-red-700 flex items-center gap-1">
+      <Badge className="flex items-center gap-1 border-red-500/40 bg-red-500/10 text-red-300">
         <XCircle className="h-3.5 w-3.5" />
         Wrong
       </Badge>
@@ -86,7 +86,7 @@ export function ExerciseInput({
       animate={shake ? { x: [0, -8, 8, -6, 6, -3, 3, 0] } : { x: 0 }}
       transition={{ duration: 0.42 }}
     >
-      <Card className="noise overflow-hidden p-0 border-black/15 bg-white/90">
+      <Card className="noise overflow-hidden rounded-2xl border border-app bg-card p-0 backdrop-blur-sm">
         <div className="p-5">
           {/* Top line */}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -101,7 +101,7 @@ export function ExerciseInput({
           </div>
 
           {/* Prompt */}
-          <div className="mt-3 text-lg font-semibold tracking-tight text-black">
+          <div className="mt-3 text-lg font-semibold tracking-tight text-primary">
             {prompt}
           </div>
 
@@ -109,15 +109,13 @@ export function ExerciseInput({
           <div className="mt-4">
             <div
               className={cn(
-                "rounded-2xl border bg-white/70 backdrop-blur",
-                "shadow-[0_12px_26px_rgba(0,0,0,0.06)]",
-                checked && correct && "border-emerald-200 bg-emerald-50",
-                checked && !correct && "border-red-200 bg-red-50",
-                !checked && "border-black/10"
+                "rounded-2xl border border-app bg-soft backdrop-blur",
+                checked && correct && "border-emerald-500/50 bg-emerald-500/10",
+                checked && !correct && "border-red-500/50 bg-red-500/10"
               )}
             >
               <div className="flex items-center gap-2 px-4 py-3">
-                <Sparkles className="h-4 w-4 text-black/50" />
+                <Sparkles className="h-4 w-4 text-secondary" />
                 <input
                   value={value}
                   onChange={(e) => !checked && setValue(e.target.value)}
@@ -126,7 +124,7 @@ export function ExerciseInput({
                   }}
                   disabled={checked}
                   className={cn(
-                    "w-full bg-transparent text-base outline-none placeholder:text-black/45",
+                    "w-full bg-transparent text-base text-primary outline-none placeholder:text-secondary",
                     "disabled:cursor-not-allowed"
                   )}
                   placeholder="Type your answer…"
@@ -140,7 +138,7 @@ export function ExerciseInput({
             </div>
 
             {!checked ? (
-              <div className="mt-2 text-sm text-black/60">
+              <div className="mt-2 text-sm text-secondary">
                 Подсказка: без лишних пробелов — мы нормализуем ввод.
               </div>
             ) : null}
@@ -188,7 +186,7 @@ export function ExerciseInput({
               ) : null}
             </div>
 
-            <div className="text-sm text-black/60">
+            <div className="text-sm text-secondary">
               {checked ? (
                 correct ? (
                   <span className="font-medium text-emerald-700">
@@ -212,31 +210,31 @@ export function ExerciseInput({
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4 rounded-2xl border border-black/10 bg-white/60 p-4 backdrop-blur"
+              className="mt-4 rounded-2xl border border-app bg-soft p-4 backdrop-blur"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="text-sm font-semibold text-black">
+                  <div className="text-sm font-semibold text-primary">
                     Правильный ответ
                   </div>
 
                   {reveal ? (
                     <>
-                      <div className="mt-1 text-sm text-black/70">
-                        <span className="font-semibold text-black">{answer}</span>
+                      <div className="mt-1 text-sm text-secondary">
+                        <span className="font-semibold text-primary">{answer}</span>
                       </div>
 
                       {Array.isArray(accept) && accept.length ? (
-                        <div className="mt-2 text-sm text-black/60">
+                        <div className="mt-2 text-sm text-secondary">
                           Также принимается:{" "}
-                          <span className="text-black/70">
+                          <span className="text-secondary">
                             {accept.join(", ")}
                           </span>
                         </div>
                       ) : null}
                     </>
                   ) : (
-                    <div className="mt-1 text-sm text-black/60">
+                    <div className="mt-1 text-sm text-secondary">
                       Нажми “Показать”, чтобы увидеть ответ.
                     </div>
                   )}
