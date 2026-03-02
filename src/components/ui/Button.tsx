@@ -14,26 +14,26 @@ export function Button({
 }: Props) {
   const v =
     variant === "primary"
-      ? "bg-black text-white hover:opacity-90 shadow-[0_14px_30px_rgba(0,0,0,0.18)]"
+      ? "border-[#96b2ff] bg-[#dce7ff] text-[#0b1020] hover:bg-[#cfdfff] shadow-[0_12px_30px_rgba(120,154,255,0.35)]"
       : variant === "secondary"
-      ? "bg-white/70 text-black border-black/10 hover:bg-white/90 shadow-[0_12px_26px_rgba(0,0,0,0.08)] backdrop-blur"
+      ? "border-white/20 bg-white/10 text-white hover:bg-white/15"
       : variant === "danger"
-      ? "bg-red-600 text-white hover:bg-red-700 shadow-[0_14px_30px_rgba(220,38,38,0.25)]"
-      : "bg-transparent text-black hover:bg-black/5 border-transparent";
+      ? "border-red-500 bg-red-600 text-white hover:bg-red-500"
+      : "border-transparent bg-transparent text-white/80 hover:bg-white/10 hover:text-white";
 
   const s =
     size === "sm"
-      ? "px-3 py-2 text-sm rounded-xl"
+      ? "rounded-lg px-3 py-2 text-sm"
       : size === "lg"
-      ? "px-5 py-3 text-base rounded-2xl"
-      : "px-4 py-2 text-sm rounded-xl";
+      ? "rounded-xl px-5 py-3 text-base"
+      : "rounded-lg px-4 py-2 text-sm";
 
   return (
     <button
       className={cn(
         "inline-flex items-center justify-center gap-2 font-medium transition",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        "focus-visible:outline-none",
         variant !== "ghost" && "border",
         v,
         s,

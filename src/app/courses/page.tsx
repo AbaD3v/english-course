@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BookOpen, CircleCheckBig, Clock3 } from "lucide-react";
 import { createSupabaseServer } from "@/lib/supabase/server";
 
 export default async function CoursesPage() {
@@ -12,10 +13,7 @@ export default async function CoursesPage() {
     .select("*")
     .order("created_at", { ascending: false });
 
-  let courseProgress: Record<
-    string,
-    { total: number; done: number; percent: number }
-  > = {};
+  const courseProgress: Record<string, { total: number; done: number; percent: number }> = {};
 
   if (user && courses?.length) {
     for (const course of courses) {
@@ -27,7 +25,6 @@ export default async function CoursesPage() {
       const lessonIds = lessons?.map((l) => l.id) ?? [];
 
       let done = 0;
-
       if (lessonIds.length) {
         const { data: progress } = await supabase
           .from("lesson_progress")
@@ -35,30 +32,30 @@ export default async function CoursesPage() {
           .eq("user_id", user.id)
           .in("lesson_id", lessonIds);
 
-        done =
-          progress?.filter((p) => p.status === "done").length ?? 0;
+        done = progress?.filter((p) => p.status === "done").length ?? 0;
       }
 
       const total = lessonIds.length;
       const percent = total ? Math.round((done / total) * 100) : 0;
-
       courseProgress[course.id] = { total, done, percent };
     }
   }
 
   return (
-    <main className="max-w-5xl mx-auto p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-semibold">Курсы</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Выбери курс и продолжай обучение.
+    <main className="space-y-8">
+      <div className="max-w-3xl">
+        <p className="text-xs uppercase tracking-[0.24em] text-[#a8c0ff]">Course library</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Курсы</h1>
+        <p className="mt-2 text-sm leading-relaxed text-white/65 sm:text-base">
+          Сначала фундамент, затем практика и закрепление. На десктопе карточки читаются быстрее за счёт
+          более контрастной типографики и визуальных индикаторов.
         </p>
       </div>
 
       {!user && (
-        <div className="rounded-2xl border p-4 text-sm text-muted-foreground">
-          Войди, чтобы сохранять прогресс.{" "}
-          <Link href="/auth" className="underline">
+        <div className="rounded-2xl border border-[#8bacff]/30 bg-[#8bacff]/10 p-4 text-sm text-[#d6e2ff]">
+          Войди, чтобы сохранять прогресс и продолжать с места, где остановился.
+          <Link href="/auth" className="ml-2 underline underline-offset-4 text-white">
             Войти
           </Link>
         </div>
@@ -72,39 +69,41 @@ export default async function CoursesPage() {
             <Link
               key={course.id}
               href={`/courses/${course.slug}`}
-              className="rounded-2xl border p-5 hover:shadow-sm transition bg-white/60"
+              className="group rounded-2xl border border-white/12 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-5 transition hover:-translate-y-0.5 hover:border-[#8bacff]/35 hover:shadow-[0_20px_50px_rgba(18,39,95,0.28)]"
             >
               <div className="flex items-center justify-between gap-3">
-                <h2 className="font-semibold text-lg">
-                  {course.title}
-                </h2>
+                <h2 className="text-lg font-semibold text-white">{course.title}</h2>
 
                 {course.level && (
-                  <span className="text-xs rounded-full border px-2 py-1">
+                  <span className="rounded-full border border-white/20 bg-white/10 px-2 py-1 text-xs text-white/85">
                     {course.level}
                   </span>
                 )}
               </div>
 
               {course.description && (
-                <p className="text-sm text-muted-foreground mt-2 line-clamp-3">
-                  {course.description}
-                </p>
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/65">{course.description}</p>
               )}
+
+              <div className="mt-4 flex items-center gap-2 text-xs text-white/50">
+                <BookOpen className="h-3.5 w-3.5" />
+                <span>Уроки + практика</span>
+              </div>
 
               {user && progress && (
                 <div className="mt-4 space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span>
+                  <div className="flex items-center justify-between text-xs text-white/60">
+                    <span className="inline-flex items-center gap-1.5">
+                      <CircleCheckBig className="h-3.5 w-3.5 text-[#a8c0ff]" />
                       {progress.done}/{progress.total}
                     </span>
-                    <span>{progress.percent}%</span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Clock3 className="h-3.5 w-3.5" />
+                      {progress.percent}%
+                    </span>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="h-full bg-black"
-                      style={{ width: `${progress.percent}%` }}
-                    />
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                    <div className="h-full bg-[#a8c0ff]" style={{ width: `${progress.percent}%` }} />
                   </div>
                 </div>
               )}
