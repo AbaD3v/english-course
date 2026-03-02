@@ -147,13 +147,13 @@ export default function LessonShell({
   );
 
   const sidebar = (
-    <Card className="h-full rounded-2xl border border-app bg-card p-3 shadow-sm backdrop-blur-sm">
+    <Card className="h-full border border-zinc-200/70 bg-white/90 p-3 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/70 dark:ring-zinc-800/60">
       <div className="flex items-start justify-between gap-2 p-2">
         <div className="min-w-0">
-          <div className="text-xs font-medium uppercase tracking-[0.18em] text-secondary">
+          <div className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
             Course
           </div>
-          <div className="truncate text-sm font-semibold text-primary">
+          <div className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
             {course.title}
           </div>
         </div>
@@ -169,7 +169,7 @@ export default function LessonShell({
         {modules.map((m) => (
           <div key={m.title}>
             <div className="mb-2 flex items-center justify-between px-2">
-              <div className="text-xs font-semibold text-secondary">
+              <div className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">
                 {m.title}
               </div>
             </div>
@@ -189,28 +189,28 @@ export default function LessonShell({
                     <div
                       className={cn(
                         "group flex items-center gap-3 rounded-xl px-3 py-2 transition-all",
-                        "hover:bg-[rgba(255,255,255,0.04)]",
-                        active && "bg-[rgba(255,255,255,0.08)] shadow-inner"
+                        "hover:bg-zinc-100 dark:hover:bg-zinc-800/80",
+                        active && "bg-zinc-100 shadow-inner dark:bg-zinc-800"
                       )}
                     >
                       {status === "done" ? (
                         <CircleCheckBig className="size-4 text-emerald-500" />
                       ) : (
-                        <div className="size-4 rounded-full border-2 border-app group-hover:border-white/20 " />
+                        <div className="size-4 rounded-full border-2 border-zinc-300 group-hover:border-zinc-400 dark:border-zinc-600 dark:group-hover:border-zinc-500" />
                       )}
 
                       <div className="min-w-0 flex-1">
                         <div
                           className={cn(
                             "truncate text-sm font-medium",
-                            active ? "text-primary" : "text-secondary"
+                            active ? "text-zinc-950 dark:text-white" : "text-zinc-700 dark:text-zinc-300"
                           )}
                         >
                           {l.order_index}. {l.title}
                         </div>
                       </div>
 
-                      <ChevronRight className="size-4 text-secondary" />
+                      <ChevronRight className="size-4 text-zinc-400 dark:text-zinc-500" />
                     </div>
                   </Link>
                 );
@@ -233,20 +233,20 @@ export default function LessonShell({
             className="w-full max-w-xl"
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <Card className="overflow-hidden rounded-2xl border border-app bg-card p-0 shadow-2xl backdrop-blur-sm">
+            <Card className="overflow-hidden bg-white/95 p-0 shadow-2xl ring-1 ring-zinc-200/60 backdrop-blur-xl dark:bg-zinc-950/95 dark:ring-zinc-800/70">
               <Command className="w-full">
-                <div className="flex items-center gap-2 border-b border-app px-4 py-3">
-                  <Search className="size-5 text-secondary" />
+                <div className="flex items-center gap-2 border-b border-zinc-200/70 px-4 py-3 dark:border-zinc-800/80">
+                  <Search className="size-5 text-zinc-400 dark:text-zinc-500" />
                   <Command.Input
                     autoFocus
                     placeholder="Поиск по урокам..."
-                    className="w-full bg-transparent text-sm text-primary outline-none placeholder:text-secondary"
+                    className="w-full bg-transparent text-sm text-zinc-900 outline-none placeholder:text-zinc-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
                   />
                   <Badge variant="muted">ESC</Badge>
                 </div>
 
                 <Command.List className="max-h-[420px] overflow-auto p-2">
-                  <Command.Empty className="p-4 text-sm text-secondary">
+                  <Command.Empty className="p-4 text-sm text-zinc-500 dark:text-zinc-400">
                     Ничего не найдено.
                   </Command.Empty>
 
@@ -266,7 +266,7 @@ export default function LessonShell({
                           }}
                           className={cn(
                             "flex cursor-pointer items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm",
-                            "aria-selected:bg-[rgba(255,255,255,0.06)]"
+                            "aria-selected:bg-zinc-100 dark:aria-selected:bg-zinc-800"
                           )}
                         >
                           <span className="truncate">
@@ -302,17 +302,17 @@ export default function LessonShell({
         <main className="h-full overflow-y-auto p-4 md:p-6 space-y-6">
           <div className="lg:hidden">{sidebar}</div>
 
-          <Card className="rounded-2xl border border-app bg-card p-6 shadow-sm backdrop-blur-sm">
+          <Card className="rounded-3xl border border-zinc-200/70 bg-white/90 p-6 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/70 dark:ring-zinc-800/60">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <div className="text-sm text-secondary">
+                <div className="text-sm text-zinc-500 dark:text-zinc-400">
                   Lesson {lesson.order_index}/{navLessons.length}
                 </div>
-                <h1 className="truncate text-2xl font-semibold tracking-tight text-primary">
+                <h1 className="truncate text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
                   {lesson.title}
                 </h1>
                 {lesson.description ? (
-                  <p className="mt-2 max-w-2xl text-sm text-secondary">
+                  <p className="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-300">
                     {lesson.description}
                   </p>
                 ) : null}
@@ -344,7 +344,7 @@ export default function LessonShell({
             </div>
 
             <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-              <div className="text-sm leading-relaxed text-secondary">
+              <div className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
                 {step === "theory" &&
                   "Прочитай материал (и посмотри видео, если есть). Потом отметь шаг выполненным."}
                 {step === "practice" &&
@@ -399,7 +399,7 @@ export default function LessonShell({
 
           {/* THEORY */}
           {step === "theory" ? (
-            <Card className="rounded-2xl border border-app bg-card p-8 shadow-sm backdrop-blur-sm">
+            <Card className="rounded-3xl border border-zinc-200/70 bg-white/90 p-8 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/70 dark:ring-zinc-800/60">
               <div className="space-y-8">
                 {theoryBlocks.map((b, i) => (
                   <BlockRenderer key={i} block={b} />
@@ -410,7 +410,7 @@ export default function LessonShell({
 
           {/* PRACTICE */}
           {step === "practice" ? (
-            <Card className="rounded-2xl border border-app bg-card p-6 shadow-sm backdrop-blur-sm">
+            <Card className="rounded-3xl border border-zinc-200/70 bg-white/90 p-6 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/70 dark:ring-zinc-800/60">
               <div className="space-y-4">
                 {practiceBlocks.length ? (
                   <>
@@ -448,7 +448,7 @@ export default function LessonShell({
                     </div>
                   </>
                 ) : (
-                  <div className="text-sm leading-relaxed text-secondary">
+                  <div className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
                     В этом уроке нет практики.
                   </div>
                 )}
@@ -460,14 +460,14 @@ export default function LessonShell({
           {step === "quiz" ? (
             <>
               {!canOpenQuiz ? (
-                <Card className="rounded-2xl border border-app bg-card p-6 shadow-sm backdrop-blur-sm">
+                <Card className="rounded-3xl border border-zinc-200/70 bg-white/90 p-6 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/70 dark:ring-zinc-800/60">
                   <div className="flex items-start gap-3">
-                    <Lock className="mt-0.5 h-5 w-5 text-secondary" />
+                    <Lock className="mt-0.5 h-5 w-5 text-zinc-500 dark:text-zinc-400" />
                     <div>
-                      <div className="text-sm font-semibold text-primary">
+                      <div className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                         Quiz закрыт
                       </div>
-                      <div className="mt-1 text-sm text-secondary">
+                      <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
                         Сначала отметь Theory и Practice как выполненные.
                       </div>
                     </div>
@@ -516,15 +516,15 @@ function StepChip({
       disabled={locked}
       className={cn(
         "inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all",
-        "bg-soft text-secondary hover:bg-[rgba(255,255,255,0.04)]",
-        active && "bg-[rgba(255,255,255,0.08)] text-primary shadow-md",
-        locked && "cursor-not-allowed opacity-50 hover:bg-soft"
+        "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
+        active && "bg-zinc-900 text-white shadow-md dark:bg-white dark:text-zinc-900",
+        locked && "cursor-not-allowed opacity-50 hover:bg-zinc-100 dark:hover:bg-zinc-800"
       )}
     >
       {icon}
       {title}
       {done ? <CircleCheckBig className="size-4 text-emerald-500" /> : null}
-      {locked ? <Lock className="size-4 text-secondary" /> : null}
+      {locked ? <Lock className="size-4 text-zinc-400 dark:text-zinc-500" /> : null}
     </button>
   );
 }
@@ -533,13 +533,13 @@ function BlockRenderer({ block }: { block: any }) {
   switch (block.type) {
     case "heading":
       return (
-        <h2 className="mt-6 text-2xl font-semibold tracking-tight text-primary first:mt-0">
+        <h2 className="mt-6 text-2xl font-semibold tracking-tight text-zinc-900 first:mt-0 dark:text-zinc-100">
           {block.text}
         </h2>
       );
     case "paragraph":
       return (
-        <p className="whitespace-pre-line text-base leading-7 text-secondary">
+        <p className="whitespace-pre-line text-base leading-7 text-zinc-700 dark:text-zinc-300">
           {block.text}
         </p>
       );
@@ -547,8 +547,8 @@ function BlockRenderer({ block }: { block: any }) {
       return <LessonVideo url={block.url} title={block.title} />;
     case "vocab":
       return (
-        <div className="rounded-2xl border border-app bg-card p-6 shadow-sm backdrop-blur-sm">
-          <div className="flex items-center gap-3 text-primary">
+        <div className="rounded-3xl border border-zinc-200/70 bg-white/90 p-6 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/70 dark:ring-zinc-800/60">
+          <div className="flex items-center gap-3 text-zinc-900 dark:text-zinc-100">
             <Zap className="size-5 text-amber-500" />
             <h3 className="text-lg font-semibold">Словарик</h3>
           </div>
@@ -557,14 +557,14 @@ function BlockRenderer({ block }: { block: any }) {
             {block.items?.map((it: any, i: number) => (
               <div
                 key={i}
-                className="rounded-2xl border border-app bg-soft p-5 shadow-sm"
+                className="rounded-2xl border border-zinc-200/70 bg-white/95 p-5 shadow-sm dark:border-zinc-800/70 dark:bg-zinc-900/90"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-semibold text-primary">{it.word}</span>
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">{it.word}</span>
                   <Badge variant="muted">{it.translation}</Badge>
                 </div>
                 {it.example ? (
-                  <p className="mt-3 text-sm italic text-secondary">
+                  <p className="mt-3 text-sm italic text-zinc-600 dark:text-zinc-300">
                     “{it.example}”
                   </p>
                 ) : null}

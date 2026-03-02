@@ -3,15 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #030303;
-  --foreground: #f5f5f5;
-  --bg-main: #030303;
-  --bg-card: #0b0b0f;
-  --bg-soft: #111115;
-  --border-app: rgba(255, 255, 255, 0.06);
-  --hover-app: rgba(255, 255, 255, 0.04);
-  --text-primary: #f5f5f5;
-  --text-secondary: #a1a1aa;
+  --background: #f7f7f8;
+  --foreground: #111111;
 }
 
 html.dark {
@@ -31,9 +24,9 @@ html.dark {
     background-color: var(--background);
     color: var(--foreground);
     background-image:
-      radial-gradient(900px 500px at 12% -8%, rgba(255, 255, 255, 0.08), transparent 55%),
-      radial-gradient(900px 500px at 88% -8%, rgba(255, 255, 255, 0.06), transparent 55%),
-      linear-gradient(180deg, #070707 0%, #030303 45%, #020202 100%);
+      radial-gradient(900px 500px at 12% -8%, rgba(255, 255, 255, 0.13), transparent 55%),
+      radial-gradient(900px 500px at 88% -8%, rgba(255, 255, 255, 0.09), transparent 55%),
+      linear-gradient(180deg, #f4f4f5 0%, #efeff1 45%, #ececee 100%);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -80,34 +73,6 @@ html.dark {
   .text-app {
     color: var(--foreground);
   }
-
-  .bg-main {
-    background-color: var(--bg-main);
-  }
-
-  .bg-card {
-    background-color: var(--bg-card);
-  }
-
-  .bg-soft {
-    background-color: var(--bg-soft);
-  }
-
-  .border-app {
-    border-color: var(--border-app);
-  }
-
-  .hover-app:hover {
-    background-color: var(--hover-app);
-  }
-
-  .text-primary {
-    color: var(--text-primary);
-  }
-
-  .text-secondary {
-    color: var(--text-secondary);
-  }
 }
 
 :focus-visible {
@@ -126,12 +91,12 @@ html.dark {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(100, 100, 120, 0.35);
   border-radius: 999px;
-  border: 2px solid transparent;
+  border: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.14) rgba(255, 255, 255, 0.02);
+  scrollbar-color: rgba(100, 100, 120, 0.35) rgba(255, 255, 255, 0.03);
 }
