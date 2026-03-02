@@ -1,5 +1,9 @@
+// courses/page.tsx
 import Link from "next/link";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
+import { cn } from "@/components/ui/cn";
 
 export default async function CoursesPage() {
   const supabase = await createSupabaseServer();
@@ -47,24 +51,28 @@ export default async function CoursesPage() {
   }
 
   return (
-    <main className="max-w-5xl mx-auto p-6 space-y-6">
+    <main className="max-w-6xl mx-auto p-6 md:p-8 space-y-8">
       <div>
-        <h1 className="text-3xl font-semibold">Курсы</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h1 className="text-4xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">Курсы</h1>
+        <p className="text-base text-zinc-600 dark:text-zinc-400 mt-2">
           Выбери курс и продолжай обучение.
         </p>
       </div>
 
       {!user && (
-        <div className="rounded-2xl border p-4 text-sm text-muted-foreground">
-          Войди, чтобы сохранять прогресс.{" "}
-          <Link href="/auth" className="underline">
-            Войти
+        <div className="rounded-3xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 text-sm flex items-center justify-between gap-4">
+          <div className="text-zinc-600 dark:text-zinc-400">
+            Войди, чтобы сохранять прогресс и отслеживать достижения.
+          </div>
+          <Link href="/auth">
+            <Badge variant="muted" className="hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer text-xs rounded-full px-4 py-1.5">
+              Войти
+            </Badge>
           </Link>
         </div>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {courses?.map((course) => {
           const progress = courseProgress[course.id];
 
@@ -72,42 +80,45 @@ export default async function CoursesPage() {
             <Link
               key={course.id}
               href={`/courses/${course.slug}`}
-              className="rounded-2xl border p-5 hover:shadow-sm transition bg-white/60"
+              className="group"
             >
-              <div className="flex items-center justify-between gap-3">
-                <h2 className="font-semibold text-lg">
-                  {course.title}
-                </h2>
-
-                {course.level && (
-                  <span className="text-xs rounded-full border px-2 py-1">
-                    {course.level}
-                  </span>
-                )}
-              </div>
-
-              {course.description && (
-                <p className="text-sm text-muted-foreground mt-2 line-clamp-3">
-                  {course.description}
-                </p>
-              )}
-
-              {user && progress && (
-                <div className="mt-4 space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span>
-                      {progress.done}/{progress.total}
-                    </span>
-                    <span>{progress.percent}%</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="h-full bg-black"
-                      style={{ width: `${progress.percent}%` }}
-                    />
-                  </div>
+              <Card className="h-full rounded-3xl border border-zinc-100 dark:border-zinc-800 transition-all duration-300 hover:shadow-lg hover:border-zinc-200 dark:hover:border-zinc-700 bg-white dark:bg-zinc-950 flex flex-col overflow-hidden p-6">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h2 className="text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 group-hover:text-zinc-800 dark:group-hover:text-zinc-200">
+                    {course.title}
+                  </h2>
+                  {course.level && (
+                    <Badge variant="muted" className="text-xs rounded-full px-3 py-1 text-zinc-700 dark:text-zinc-300 font-normal shrink-0">
+                      {course.level}
+                    </Badge>
+                  )}
                 </div>
-              )}
+                
+                <div className="flex-grow flex flex-col justify-between gap-6">
+                  {course.description && (
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">
+                      {course.description}
+                    </p>
+                  )}
+                  
+                  {user && progress && (
+                    <div className="space-y-3 mt-auto">
+                      <div className="flex justify-between items-center text-xs font-medium">
+                        <span className="text-zinc-600 dark:text-zinc-400">
+                          {progress.done} / {progress.total} уроков
+                        </span>
+                        <span className="text-zinc-950 dark:text-zinc-50">{progress.percent}%</span>
+                      </div>
+                      <div className="h-2 w-full rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                        <div
+                          className="h-full bg-zinc-900 dark:bg-zinc-50 rounded-full transition-all duration-500 ease-out"
+                          style={{ width: `${progress.percent}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Card>
             </Link>
           );
         })}

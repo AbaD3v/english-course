@@ -1,6 +1,12 @@
+// courses/[slug]/page.tsx
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { cn } from "@/components/ui/cn";
+import { ArrowLeft, BookOpen, CheckCircle2, Lock, Trophy } from "lucide-react";
 
 type LessonRow = {
   id: string;
@@ -10,11 +16,13 @@ type LessonRow = {
   tags: string[] | null;
 };
 
+// Функция meta теперь просто возвращает классы или заглушки, 
+// т.к. Badge не принимает варианты в ваших компонентах
 function statusMeta(status: string) {
   if (status === "done")
-    return { label: "Done", dot: "bg-emerald-400", text: "text-emerald-700" };
+    return { label: "Done", dot: "bg-emerald-500", text: "text-emerald-600" };
   if (status === "in_progress")
-    return { label: "In progress", dot: "bg-amber-400", text: "text-amber-700" };
+    return { label: "In progress", dot: "bg-amber-500", text: "text-amber-600" };
   return { label: "Not started", dot: "bg-zinc-300", text: "text-zinc-500" };
 }
 
@@ -119,24 +127,24 @@ export default async function CoursePage({
   }
 
   return (
-    <main className="space-y-8">
+    <main className="max-w-6xl mx-auto p-6 md:p-8 space-y-8">
       {/* Top row */}
       <div className="flex items-center justify-between gap-3">
-        <Link
-          href="/courses"
-          className="rounded-xl border border-black/10 bg-white/60 px-3 py-2 text-sm font-medium hover:bg-white/80 transition"
-        >
-          ← Все курсы
-        </Link>
+        <Button variant="ghost" size="sm" className="rounded-xl gap-2">
+          <Link href="/courses" className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" /> Все курсы
+          </Link>
+        </Button>
 
-        <div className="text-sm text-black/60">
+        <div className="text-sm text-zinc-500">
           {user ? (
-            <span className="font-medium text-black/80">Signed in</span>
+            <span className="font-medium text-zinc-950 dark:text-zinc-50">Привет!</span>
           ) : (
-            <span>
+            <span className="flex items-center gap-2">
+              <Lock className="h-4 w-4" />
               <Link href="/auth" className="underline">
                 Войти
-              </Link>{" "}
+              </Link>
               чтобы сохранять прогресс
             </span>
           )}
@@ -144,120 +152,94 @@ export default async function CoursePage({
       </div>
 
       {/* Hero */}
-      <section className="rounded-[28px] border border-black/10 bg-white/70 backdrop-blur shadow-[0_18px_50px_rgba(0,0,0,0.06)] overflow-hidden">
-        <div className="p-6 md:p-8">
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-            <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-2">
-                {course.level ? (
-                  <span className="text-xs rounded-full border border-black/10 px-2.5 py-1 bg-white/70 text-black/70">
-                    {course.level}
-                  </span>
-                ) : null}
-
-                <span className="text-xs rounded-full border border-black/10 px-2.5 py-1 bg-white/70 text-black/70">
-                  {total} lessons
-                </span>
-                <span className="text-xs rounded-full border border-black/10 px-2.5 py-1 bg-white/70 text-black/70">
-                  {doneCount} done
-                </span>
-              </div>
-
-              <div>
-                <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-black">
-                  {course.title}
-                </h1>
-
-                {course.description ? (
-                  <p className="mt-2 text-sm md:text-base text-black/60 max-w-2xl">
-                    {course.description}
-                  </p>
-                ) : null}
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 pt-1">
-                {continueHref ? (
-                  <Link
-                    href={continueHref}
-                    className="rounded-2xl bg-black text-white px-5 py-3 font-medium hover:opacity-90 transition shadow-[0_14px_30px_rgba(0,0,0,0.18)]"
-                  >
-                    Продолжить
-                  </Link>
-                ) : null}
-                <Link
-  href={`/certificate/${course.slug}`}
-  className="rounded-2xl border border-black/10 bg-white/70 px-5 py-3 font-medium hover:bg-white/90 transition"
->
-  Сертификат
-</Link>
-
-                {continueText ? (
-                  <span className="text-sm text-black/60">
-                    Следующий:{" "}
-                    <span className="font-medium text-black/80">
-                      {continueText}
-                    </span>
-                  </span>
-                ) : null}
-              </div>
+      <section className="rounded-[32px] border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 md:p-8 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+          <div className="space-y-4 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              {course.level && (
+                <Badge className="rounded-full text-xs bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                  {course.level}
+                </Badge>
+              )}
+              <Badge className="rounded-full text-xs gap-1 bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                <BookOpen className="h-3 w-3" /> {total} lessons
+              </Badge>
+              <Badge className="rounded-full text-xs gap-1 bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                <CheckCircle2 className="h-3 w-3" /> {doneCount} done
+              </Badge>
             </div>
 
-            {/* Progress widget */}
-            <div className="w-full md:w-[360px] rounded-2xl border border-black/10 bg-white/60 p-5">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-black/60">Прогресс</span>
-                <span className="font-medium text-black/80">
-                  {doneCount}/{total} • {percent}%
-                </span>
-              </div>
+            <div className="space-y-2">
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+                {course.title}
+              </h1>
+              {course.description && (
+                <p className="text-base text-zinc-600 dark:text-zinc-400 max-w-2xl">
+                  {course.description}
+                </p>
+              )}
+            </div>
 
-              <div className="mt-3 h-2 w-full rounded-full bg-black/10 overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-black/70"
-                  style={{ width: `${percent}%` }}
-                />
-              </div>
-
-              <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-2xl border border-black/10 bg-white/70 p-3">
-                  <div className="text-xs text-black/50">Lessons</div>
-                  <div className="mt-1 font-semibold text-black">{total}</div>
-                </div>
-                <div className="rounded-2xl border border-black/10 bg-white/70 p-3">
-                  <div className="text-xs text-black/50">Done</div>
-                  <div className="mt-1 font-semibold text-black">{doneCount}</div>
-                </div>
-                <div className="rounded-2xl border border-black/10 bg-white/70 p-3">
-                  <div className="text-xs text-black/50">Score</div>
-                  <div className="mt-1 font-semibold text-black">
-                    {avgScore !== null ? `${avgScore}%` : "—"}
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              {continueHref && (
+                <Button size="lg" className="rounded-2xl">
+                  <Link href={continueHref} className="flex items-center gap-2">
+                    Продолжить <span className="font-normal opacity-80">{continueText}</span>
+                  </Link>
+                </Button>
+              )}
+              <Button variant="ghost" size="lg" className="rounded-2xl">
+                <Link href={`/certificate/${course.slug}`} className="flex items-center gap-2">
+                  <Trophy className="h-4 w-4" /> Сертификат
+                </Link>
+              </Button>
             </div>
           </div>
-        </div>
 
-        {/* subtle gradient strip */}
-        <div className="h-10 bg-gradient-to-r from-black/5 via-black/0 to-black/5" />
+          {/* Progress widget */}
+          <Card className="w-full md:w-[320px] rounded-3xl border border-zinc-100 dark:border-zinc-800 shrink-0 p-5">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-zinc-600 dark:text-zinc-400">Прогресс</span>
+              <span className="font-semibold text-zinc-950 dark:text-zinc-50">
+                {percent}%
+              </span>
+            </div>
+            
+            <div className="mt-3 h-2 w-full rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-zinc-900 dark:bg-zinc-50 transition-all duration-500"
+                style={{ width: `${percent}%` }}
+              />
+            </div>
+
+            <div className="mt-5 grid grid-cols-3 gap-2 text-center">
+              {[
+                { label: "Lessons", value: total },
+                { label: "Done", value: doneCount },
+                { label: "Score", value: avgScore !== null ? `${avgScore}%` : "—" },
+              ].map((item) => (
+                <div key={item.label} className="rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-3">
+                  <div className="text-xs text-zinc-500 dark:text-zinc-400">{item.label}</div>
+                  <div className="mt-1 font-semibold text-zinc-950 dark:text-zinc-50">{item.value}</div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
       </section>
 
-      {/* Lessons header */}
-      <section className="space-y-5">
-        <div className="flex items-end justify-between gap-3">
+      {/* Lessons section */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-semibold text-black">Lessons</h2>
-            <p className="text-sm text-black/60">
-              Выбирай уроки по порядку или переходи к нужному через поиск.
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">Lessons</h2>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              Выбирай уроки по порядку или используй поиск.
             </p>
           </div>
-
-          <Link
-            href="/search"
-            className="rounded-xl border border-black/10 bg-white/60 px-3 py-2 text-sm font-medium hover:bg-white/80 transition"
-          >
-            Поиск →
-          </Link>
+          <Button variant="ghost" size="sm" className="rounded-xl">
+            <Link href="/search">Поиск →</Link>
+          </Button>
         </div>
 
         {/* Modules */}
@@ -277,17 +259,16 @@ export default async function CoursePage({
             return (
               <div key={m.title} className="space-y-4">
                 {/* Module header */}
-                <div className="flex items-end justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800">
                   <div>
-                    <div className="text-sm font-semibold text-black">{m.title}</div>
-                    <div className="mt-1 text-xs text-black/50">
-                      {moduleDone}/{moduleLessons.length} • {modulePercent}%
+                    <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">{m.title}</h3>
+                    <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                      {moduleDone} / {moduleLessons.length} lessons • {modulePercent}%
                     </div>
                   </div>
-
-                  <div className="h-1.5 w-28 rounded-full bg-black/10 overflow-hidden">
+                  <div className="h-1.5 w-28 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-black/60"
+                      className="h-full rounded-full bg-zinc-900 dark:bg-zinc-50 transition-all duration-500"
                       style={{ width: `${modulePercent}%` }}
                     />
                   </div>
@@ -306,68 +287,50 @@ export default async function CoursePage({
                         id={`lesson-${lesson.slug}`}
                         key={lesson.id}
                         href={`/lessons/${course.slug}/${lesson.slug}`}
-                        className={[
-                          "group block rounded-3xl border border-black/10 bg-white/80 backdrop-blur",
-                          "shadow-[0_18px_50px_rgba(0,0,0,0.06)]",
-                          "transition-all duration-200",
-                          "hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-[0_26px_70px_rgba(0,0,0,0.10)]",
-                          "scroll-mt-24 target:ring-2 target:ring-black/15",
-                        ].join(" ")}
+                        className="group"
                       >
-                        <div className="p-5 md:p-6">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="min-w-0">
-                              <div className="text-xs text-black/50">
+                        <Card className="h-full rounded-3xl border border-zinc-100 dark:border-zinc-800 transition-all duration-200 hover:shadow-lg hover:border-zinc-200 dark:hover:border-zinc-700 bg-white dark:bg-zinc-950 p-5">
+                          <div className="flex items-start justify-between gap-4 mb-3">
+                            <div className="text-base font-semibold text-zinc-950 dark:text-zinc-50 group-hover:text-zinc-800 dark:group-hover:text-zinc-200">
+                              <span className="text-xs text-zinc-500 dark:text-zinc-400 block font-normal">
                                 Lesson {lesson.order_index}
-                              </div>
-                              <div className="mt-1 truncate text-base font-semibold text-black">
-                                {lesson.title}
-                              </div>
+                              </span>
+                              {lesson.title}
                             </div>
-
-                            <div className="text-right">
-                              <div className="inline-flex items-center gap-2 text-xs">
-                                <span className={`h-2.5 w-2.5 rounded-full ${meta.dot}`} />
-                                <span className={`font-medium ${meta.text}`}>
-                                  {meta.label}
-                                </span>
-                              </div>
-
-                              {score !== null ? (
-                                <div className="mt-1 text-xs text-black/50">
-                                  Score: <span className="font-medium text-black/70">{score}%</span>
-                                </div>
-                              ) : null}
-                            </div>
+                            <Badge className={`rounded-full text-xs gap-1.5 shrink-0 bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300`}>
+                              <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
+                              {meta.label}
+                            </Badge>
                           </div>
+                          
+                          {score !== null && (
+                            <div className="text-xs text-zinc-600 dark:text-zinc-400 mb-3">
+                              Score: <span className="font-semibold text-zinc-950 dark:text-zinc-50">{score}%</span>
+                            </div>
+                          )}
 
-                          {lesson.tags?.length ? (
-                            <div className="mt-3 flex flex-wrap gap-2">
-                              {lesson.tags.slice(0, 5).map((t) => (
+                          {lesson.tags?.length && (
+                            <div className="flex flex-wrap gap-1.5 mb-4">
+                              {lesson.tags.slice(0, 4).map((t) => (
                                 <span
                                   key={t}
-                                  className="text-xs rounded-full border border-black/10 px-2.5 py-1 bg-black/5 text-black/70"
+                                  className="text-xs rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2.5 py-1"
                                 >
                                   {t}
                                 </span>
                               ))}
-                              {lesson.tags.length > 5 ? (
-                                <span className="text-xs rounded-full border border-black/10 px-2.5 py-1 bg-black/5 text-black/60">
-                                  +{lesson.tags.length - 5}
+                              {lesson.tags.length > 4 && (
+                                <span className="text-xs rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 px-2.5 py-1">
+                                  +{lesson.tags.length - 4}
                                 </span>
-                              ) : null}
+                              )}
                             </div>
-                          ) : null}
-
-                          <div className="mt-4 flex items-center justify-between">
-                            <div className="text-sm text-black/60 group-hover:text-black/75 transition">
-                              Open →
-                            </div>
-                            <div className="text-sm text-black/30 group-hover:text-black/55 transition">
-                              →
-                            </div>
+                          )}
+                          
+                          <div className="text-sm text-zinc-500 group-hover:text-zinc-950 dark:group-hover:text-zinc-50 transition">
+                            Open →
                           </div>
-                        </div>
+                        </Card>
                       </Link>
                     );
                   })}

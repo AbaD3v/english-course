@@ -1,3 +1,4 @@
+// lessons/[courseSlug]/[lessonSlug]/LessonQuiz.tsx
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
@@ -159,26 +160,26 @@ export function LessonQuiz({
   return (
     <section className="space-y-4">
       {/* Header */}
-      <Card className="noise overflow-hidden p-0">
-        <div className="p-5">
+      <Card className="noise overflow-hidden p-0 border border-zinc-200 dark:border-zinc-800 shadow-sm rounded-3xl">
+        <div className="p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="muted">Lesson quiz</Badge>
-                <Badge variant="muted">
+                <Badge variant="muted" className="rounded-full px-3 py-1 text-xs">Lesson quiz</Badge>
+                <Badge variant="muted" className="rounded-full px-3 py-1 text-xs">
                   {checkedCount}/{total} checked
                 </Badge>
-                <Badge variant={allChecked ? "success" : "muted"}>
+                <Badge variant={allChecked ? "success" : "muted"} className="rounded-full px-3 py-1 text-xs">
                   Correct: {correctCount}/{total}
                 </Badge>
                 {submittedScore !== null ? (
-                  <Badge variant="success">Saved: {submittedScore}%</Badge>
+                  <Badge variant="success" className="rounded-full px-3 py-1 text-xs">Saved: {submittedScore}%</Badge>
                 ) : (
-                  <Badge variant="muted">Score: {score}%</Badge>
+                  <Badge variant="muted" className="rounded-full px-3 py-1 text-xs">Score: {score}%</Badge>
                 )}
               </div>
 
-              <p className="mt-2 text-sm text-black/60">
+              <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
                 Отмечай ответы — прогресс появится сразу. Когда все проверены,
                 можно завершать урок.
               </p>
@@ -189,7 +190,7 @@ export function LessonQuiz({
                 type="button"
                 onClick={submit}
                 disabled={!canSubmit}
-                className="gap-2"
+                className="gap-2 rounded-xl"
                 title={!signedIn ? "Войди, чтобы сохранить результат" : ""}
               >
                 {submitting ? (
@@ -208,18 +209,18 @@ export function LessonQuiz({
           </div>
 
           {/* Progress bar */}
-          <div className="mt-4">
-            <div className="h-2 w-full overflow-hidden rounded-full bg-black/5">
+          <div className="mt-6">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
               <motion.div
-                className="h-full rounded-full bg-black/70"
+                className="h-full rounded-full bg-zinc-900 dark:bg-zinc-50"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPct}%` }}
                 transition={{ type: "spring", stiffness: 140, damping: 18 }}
               />
             </div>
-            <div className="mt-2 flex items-center justify-between text-xs text-black/50">
+            <div className="mt-2 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
               <span>Progress</span>
-              <span>{progressPct}%</span>
+              <span className="font-medium text-zinc-900 dark:text-zinc-50">{progressPct}%</span>
             </div>
           </div>
 
@@ -230,15 +231,15 @@ export function LessonQuiz({
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
-                className="mt-4 rounded-2xl border border-black/10 bg-white/60 p-4 backdrop-blur"
+                className="mt-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4 backdrop-blur"
               >
                 <div className="flex items-start gap-3">
-                  <Lock className="mt-0.5 h-4 w-4" />
+                  <Lock className="mt-0.5 h-4 w-4 text-zinc-500" />
                   <div>
-                    <div className="text-sm font-semibold text-black">
+                    <div className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
                       Гость-режим
                     </div>
-                    <div className="mt-1 text-xs text-black/60">
+                    <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
                       Войди, чтобы сохранять score и отмечать урок как Done.
                     </div>
                   </div>
@@ -249,15 +250,15 @@ export function LessonQuiz({
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
-                className="mt-4 rounded-2xl border border-black/10 bg-white/60 p-4 backdrop-blur"
+                className="mt-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4 backdrop-blur"
               >
                 <div className="flex items-start gap-3">
-                  <Sparkles className="mt-0.5 h-4 w-4" />
+                  <Sparkles className="mt-0.5 h-4 w-4 text-amber-500" />
                   <div>
-                    <div className="text-sm font-semibold text-black">
+                    <div className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
                       Проверь все упражнения
                     </div>
-                    <div className="mt-1 text-xs text-black/60">
+                    <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
                       Сейчас проверено {checkedCount} из {total}. Когда будет{" "}
                       {total}/{total} — кнопка станет активной.
                     </div>
@@ -269,15 +270,15 @@ export function LessonQuiz({
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
-                className="mt-4 rounded-2xl border border-black/10 bg-white/60 p-4 backdrop-blur"
+                className="mt-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4 backdrop-blur"
               >
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4" />
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-500" />
                   <div>
-                    <div className="text-sm font-semibold text-black">
+                    <div className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
                       Всё готово
                     </div>
-                    <div className="mt-1 text-xs text-black/60">
+                    <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
                       Нажми “Завершить урок”, чтобы сохранить результат и получить
                       Done.
                     </div>
@@ -335,17 +336,17 @@ export function LessonQuiz({
       </div>
 
       {/* Sticky action bar on mobile */}
-      <div className="pointer-events-none sticky bottom-3 z-20">
+      <div className="pointer-events-none sticky bottom-4 z-20">
         <div className="pointer-events-auto mx-auto max-w-3xl">
           <div
             className={cn(
-              "noise flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white/75 px-4 py-3 shadow-[0_18px_45px_rgba(0,0,0,0.10)] backdrop-blur",
+              "noise flex items-center justify-between gap-3 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 p-3 shadow-[0_18px_45px_rgba(0,0,0,0.05)] backdrop-blur-lg",
               "md:hidden"
             )}
           >
-            <div className="min-w-0">
-              <div className="text-xs text-black/50">Score</div>
-              <div className="text-sm font-semibold text-black">
+            <div className="min-w-0 pl-1">
+              <div className="text-xs text-zinc-500 dark:text-zinc-400">Score</div>
+              <div className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
                 {correctCount}/{total} • {score}%
               </div>
             </div>
@@ -354,7 +355,7 @@ export function LessonQuiz({
               type="button"
               onClick={submit}
               disabled={!canSubmit}
-              className="shrink-0 gap-2"
+              className="shrink-0 gap-2 rounded-xl"
             >
               {submitting ? (
                 <>

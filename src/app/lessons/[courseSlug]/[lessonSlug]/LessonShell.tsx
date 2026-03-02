@@ -23,6 +23,9 @@ import {
   Search,
   Lock,
   CheckCircle2,
+  BookMarked,
+  CircleCheckBig,
+  Zap,
 } from "lucide-react";
 
 type LessonNavItem = {
@@ -35,6 +38,21 @@ type LessonNavItem = {
 
 type Block = { type: string; [key: string]: any };
 type ModuleGroup = { title: string; lessons: LessonNavItem[] };
+
+interface LessonShellProps {
+  userSignedIn: boolean;
+  course: { id: string; slug: string; title: string };
+  lesson: {
+    id: string;
+    slug: string;
+    title: string;
+    order_index: number;
+    description?: string | null;
+  };
+  navLessons: LessonNavItem[];
+  progressByLessonId: Record<string, { status: string; score: number | null }>;
+  blocks: Block[];
+}
 
 function useResizableSidebar(key = "ec_sidebar_w") {
   const [width, setWidth] = useState<number>(320);
@@ -76,25 +94,16 @@ export default function LessonShell({
   navLessons,
   progressByLessonId,
   blocks,
-}: {
-  userSignedIn: boolean;
-  course: { id: string; slug: string; title: string };
-  lesson: { id: string; slug: string; title: string; order_index: number };
-  navLessons: LessonNavItem[];
-  progressByLessonId: Record<string, { status: string; score: number | null }>;
-  blocks: Block[];
-}) {
+}: LessonShellProps) {
   const router = useRouter();
   const { width, startDrag } = useResizableSidebar();
 
-  // --- Stepper ---
   type Step = "theory" | "practice" | "quiz";
   const [step, setStep] = useState<Step>("theory");
   const [theoryDone, setTheoryDone] = useState(false);
   const [practiceDone, setPracticeDone] = useState(false);
   const canOpenQuiz = theoryDone && practiceDone;
 
-  // --- CmdK ---
   const [cmdOpen, setCmdOpen] = useState(false);
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -109,18 +118,22 @@ export default function LessonShell({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  // --- Blocks split ---
   const theoryBlocks = useMemo(
-    () => blocks.filter((b) => ["heading", "paragraph", "vocab", "video"].includes(b.type)),
+    () =>
+      blocks.filter((b) =>
+        ["heading", "paragraph", "vocab", "video"].includes(b.type)
+      ),
     [blocks]
   );
 
   const practiceBlocks = useMemo(
-    () => blocks.filter((b) => b.type === "exercise_mcq" || b.type === "exercise_input"),
+    () =>
+      blocks.filter(
+        (b) => b.type === "exercise_mcq" || b.type === "exercise_input"
+      ),
     [blocks]
   );
 
-  // --- prev/next ---
   const currentIndex = navLessons.findIndex((l) => l.slug === lesson.slug);
   const prevLesson = currentIndex > 0 ? navLessons[currentIndex - 1] : null;
   const nextLesson =
@@ -128,52 +141,43 @@ export default function LessonShell({
       ? navLessons[currentIndex + 1]
       : null;
 
-  // --- Modules grouping ---
   const modules: ModuleGroup[] = useMemo(
     () => groupLessonsIntoModules(navLessons),
     [navLessons]
   );
 
   const sidebar = (
-    <Card className="p-4 noise">
-      <div className="flex items-start justify-between gap-2">
+    <Card className="p-3 bg-zinc-50 dark:bg-zinc-950/50 h-full flex flex-col">
+      <div className="flex items-start justify-between gap-2 p-2">
         <div className="min-w-0">
-          <div className="text-xs text-black/50">Course</div>
-          <div className="truncate text-sm font-semibold text-black">
+          <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+            Курс
+          </div>
+          <div className="truncate text-sm font-semibold text-zinc-950 dark:text-zinc-50 mt-0.5">
             {course.title}
           </div>
-          <div className="mt-2 flex flex-wrap gap-2">
-            <Badge variant="muted">Ctrl/⌘ K</Badge>
-            <Badge variant="muted">Outline</Badge>
-          </div>
         </div>
-
-        <div className="flex flex-col gap-2">
-          <Link href={`/courses/${course.slug}`}>
-            <Button variant="secondary" size="sm">
-              К курсу
-            </Button>
-          </Link>
-          <Button variant="secondary" size="sm" onClick={() => setCmdOpen(true)}>
-            Поиск
+        <Link href={`/courses/${course.slug}`}>
+          <Button variant="ghost" size="sm" className="px-2">
+            <BookMarked className="size-4" />
           </Button>
-        </div>
+        </Link>
       </div>
 
-      <div className="mt-4 space-y-4">
+      <div className="mt-4 flex-grow overflow-y-auto space-y-4 pr-1">
         {modules.map((m) => (
           <div key={m.title}>
-            <div className="mb-2 flex items-center justify-between">
-              <div className="text-xs font-semibold text-black/70">{m.title}</div>
-              <Badge variant="muted">{m.lessons.length}</Badge>
+            <div className="mb-2 flex items-center justify-between px-2">
+              <div className="text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+                {m.title}
+              </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               {m.lessons.map((l) => {
                 const p = progressByLessonId[l.id];
                 const active = l.slug === lesson.slug;
                 const status = p?.status ?? "not_started";
-                const score = p?.score ?? null;
 
                 return (
                   <Link
@@ -183,31 +187,30 @@ export default function LessonShell({
                   >
                     <div
                       className={cn(
-                        "rounded-2xl border border-black/10 bg-white/60 px-3 py-2 backdrop-blur transition",
-                        "hover:bg-white/85",
+                        "group rounded-xl px-3 py-2 transition-all flex items-center gap-3",
+                        "hover:bg-zinc-100 dark:hover:bg-zinc-900",
                         active &&
-                          "bg-white border-black/20 shadow-[0_12px_26px_rgba(0,0,0,0.08)]"
+                          "bg-zinc-100 dark:bg-zinc-800/60 shadow-inner"
                       )}
                     >
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="min-w-0">
-                          <div className="truncate text-sm font-medium text-black">
-                            {l.order_index}. {l.title}
-                          </div>
-                          <div className="mt-1 flex flex-wrap gap-1">
-                            <Badge variant="muted">{status}</Badge>
-                            {score !== null ? (
-                              <Badge variant="muted">{score}%</Badge>
-                            ) : null}
-                          </div>
-                        </div>
-                        <ChevronRight
+                      {status === "done" ? (
+                        <CircleCheckBig className="size-4 text-emerald-500" />
+                      ) : (
+                        <div className="size-4 rounded-full border-2 border-zinc-300 dark:border-zinc-700 group-hover:border-zinc-400" />
+                      )}
+                      <div className="min-w-0 flex-grow">
+                        <div
                           className={cn(
-                            "h-4 w-4 text-black/30",
-                            active && "text-black/60"
+                            "truncate text-sm font-medium",
+                            active
+                              ? "text-zinc-950 dark:text-zinc-50"
+                              : "text-zinc-700 dark:text-zinc-300"
                           )}
-                        />
+                        >
+                          {l.order_index}. {l.title}
+                        </div>
                       </div>
+                      <ChevronRight className="size-4 text-zinc-400" />
                     </div>
                   </Link>
                 );
@@ -221,32 +224,37 @@ export default function LessonShell({
 
   return (
     <>
-      {/* CMDK */}
       {cmdOpen ? (
         <div
-          className="fixed inset-0 z-50 grid place-items-center bg-black/30 p-4"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/50 backdrop-blur-sm p-4"
           onMouseDown={() => setCmdOpen(false)}
         >
-          <div className="w-full max-w-xl" onMouseDown={(e) => e.stopPropagation()}>
-            <Card className="p-0 overflow-hidden">
+          <div
+            className="w-full max-w-xl"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <Card className="p-0 overflow-hidden shadow-2xl">
               <Command className="w-full">
-                <div className="flex items-center gap-2 border-b border-black/10 bg-white/70 px-4 py-3">
-                  <Search className="h-4 w-4 text-black/50" />
+                <div className="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 px-4 py-3">
+                  <Search className="size-5 text-zinc-400" />
                   <Command.Input
                     autoFocus
-                    placeholder="Поиск уроков… (Ctrl/⌘ K)"
-                    className="w-full bg-transparent text-sm outline-none placeholder:text-black/40"
+                    placeholder="Поиск по урокам..."
+                    className="w-full bg-transparent text-sm outline-none placeholder:text-zinc-400"
                   />
+                  {/* ИСПРАВЛЕНО: variant="outline" -> "muted" */}
                   <Badge variant="muted">ESC</Badge>
                 </div>
-
                 <Command.List className="max-h-[420px] overflow-auto p-2">
-                  <Command.Empty className="p-4 text-sm text-black/50">
+                  <Command.Empty className="p-4 text-sm text-zinc-500">
                     Ничего не найдено.
                   </Command.Empty>
-
                   {modules.map((m) => (
-                    <Command.Group key={m.title} heading={m.title} className="px-2 py-2">
+                    <Command.Group
+                      key={m.title}
+                      heading={m.title}
+                      className="px-2 py-2"
+                    >
                       {m.lessons.map((l) => (
                         <Command.Item
                           key={l.id}
@@ -257,14 +265,14 @@ export default function LessonShell({
                           }}
                           className={cn(
                             "flex cursor-pointer items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm",
-                            "aria-selected:bg-black/5"
+                            "aria-selected:bg-zinc-100 dark:aria-selected:bg-zinc-800"
                           )}
                         >
                           <span className="truncate">
                             {l.order_index}. {l.title}
                           </span>
                           {l.slug === lesson.slug ? (
-                            <Badge variant="muted">current</Badge>
+                            <Badge variant="muted">текущий</Badge>
                           ) : null}
                         </Command.Item>
                       ))}
@@ -277,83 +285,80 @@ export default function LessonShell({
         </div>
       ) : null}
 
-      {/* LAYOUT */}
-      <div className="grid gap-4 lg:grid-cols-[auto_12px_1fr]">
-        {/* Desktop sidebar */}
-        <aside className="hidden lg:block lg:sticky lg:top-6 h-fit" style={{ width }}>
+      <div className="grid gap-4 lg:grid-cols-[auto_12px_1fr] h-screen overflow-hidden">
+        <aside className="hidden lg:block h-screen p-4 pr-0" style={{ width }}>
           {sidebar}
         </aside>
 
-        {/* Resize handle (desktop) */}
-        <div className="relative hidden lg:block">
-          <div
-            onMouseDown={startDrag}
-            className="absolute inset-0 cursor-col-resize"
-            title="Drag to resize"
-          />
-          <div className="absolute left-1/2 top-6 h-[calc(100%-24px)] w-1 -translate-x-1/2 rounded-full bg-black/5 hover:bg-black/10" />
+        <div
+          className="relative hidden lg:block cursor-col-resize group"
+          onMouseDown={startDrag}
+        >
+          <div className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 group-hover:bg-zinc-300 dark:group-hover:bg-zinc-700 transition-colors" />
         </div>
 
-        {/* Main */}
-        <main className="space-y-4">
-          {/* Mobile sidebar (top) */}
+        <main className="h-screen overflow-y-auto p-4 md:p-6 space-y-6">
           <div className="lg:hidden">{sidebar}</div>
 
-          {/* Header + stepper */}
-          <Card className="p-4 noise">
+          <Card className="p-6 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 rounded-3xl">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <div className="text-xs text-black/50">
-                  Lesson {lesson.order_index}/{navLessons.length}
+                <div className="text-sm font-medium text-zinc-500">
+                  Урок {lesson.order_index} из {navLessons.length}
                 </div>
-                <div className="truncate text-lg font-semibold text-black">
+                <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 mt-1">
                   {lesson.title}
-                </div>
+                </h1>
+                {lesson.description && (
+                  <p className="text-zinc-600 dark:text-zinc-400 mt-2 max-w-2xl">
+                    {lesson.description}
+                  </p>
+                )}
               </div>
-
               <div className="flex flex-wrap items-center gap-2">
                 <StepChip
                   active={step === "theory"}
-                  title="Theory"
-                  icon={<BookOpen className="h-4 w-4" />}
+                  title="Теория"
+                  icon={<BookOpen className="size-4" />}
                   done={theoryDone}
                   onClick={() => setStep("theory")}
                 />
                 <StepChip
                   active={step === "practice"}
-                  title="Practice"
-                  icon={<ListChecks className="h-4 w-4" />}
+                  title="Практика"
+                  icon={<ListChecks className="size-4" />}
                   done={practiceDone}
                   onClick={() => setStep("practice")}
                 />
                 <StepChip
                   active={step === "quiz"}
                   title="Quiz"
-                  icon={<Trophy className="h-4 w-4" />}
+                  icon={<Trophy className="size-4" />}
                   locked={!canOpenQuiz}
                   onClick={() => canOpenQuiz && setStep("quiz")}
                 />
               </div>
             </div>
 
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-              <div className="text-sm text-black/60">
-                {step === "theory" && "Прочитай материал (и посмотри видео, если есть). Потом отметь шаг выполненным."}
-                {step === "practice" && "Сделай упражнения. Потом откроется Quiz."}
-                {step === "quiz" && "Закрой квиз и сохрани score."}
+            <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
+              <div className="text-sm text-zinc-600 dark:text-zinc-400">
+                {step === "theory" &&
+                  "Изучите материал. Затем нажмите «Теория пройдена»."}
+                {step === "practice" &&
+                  "Выполните упражнения, чтобы открыть Quiz."}
+                {step === "quiz" && "Пройдите тест и сохраните результат."}
               </div>
-
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-2">
                 {step === "theory" ? (
                   <Button
                     onClick={() => {
                       setTheoryDone(true);
                       setStep("practice");
                     }}
-                    className="gap-2"
+                    className="gap-2 rounded-xl"
                   >
-                    <CheckCircle2 className="h-4 w-4" />
-                    Theory done
+                    <CheckCircle2 className="size-4" />
+                    Теория пройдена
                   </Button>
                 ) : step === "practice" ? (
                   <Button
@@ -362,110 +367,84 @@ export default function LessonShell({
                       setStep("quiz");
                     }}
                     disabled={!theoryDone}
-                    className="gap-2"
+                    className="gap-2 rounded-xl"
                   >
-                    <CheckCircle2 className="h-4 w-4" />
-                    Practice done
+                    <CheckCircle2 className="size-4" />
+                    Практика пройдена
                   </Button>
                 ) : null}
-
                 {prevLesson ? (
                   <Link href={`/lessons/${course.slug}/${prevLesson.slug}`}>
-                    <Button variant="secondary">← Prev</Button>
+                    {/* ИСПРАВЛЕНО: variant="outline" -> "secondary" */}
+                    <Button variant="secondary" className="rounded-xl">
+                      ← Назад
+                    </Button>
                   </Link>
                 ) : null}
-
                 {nextLesson ? (
                   <Link href={`/lessons/${course.slug}/${nextLesson.slug}`}>
-                    <Button variant="secondary">Next →</Button>
+                    {/* ИСПРАВЛЕНО: variant="outline" -> "secondary" */}
+                    <Button variant="secondary" className="rounded-xl">
+                      Вперед →
+                    </Button>
                   </Link>
                 ) : null}
               </div>
             </div>
           </Card>
 
-          {/* THEORY */}
-          {step === "theory" ? (
-            <Card className="p-6 noise">
-              <div className="space-y-5">
+          <div className="space-y-6">
+            {step === "theory" && (
+              <Card className="p-8 bg-white dark:bg-zinc-900 rounded-3xl space-y-8">
                 {theoryBlocks.map((b, i) => (
                   <BlockRenderer key={i} block={b} />
                 ))}
-              </div>
-            </Card>
-          ) : null}
-
-          {/* PRACTICE */}
-          {step === "practice" ? (
-            <Card className="p-6 noise">
-              <div className="space-y-4">
-                {practiceBlocks.length ? (
-                  <>
-                    <div className="text-sm text-black/70">
-                      Сделай упражнения и нажми <b>Practice done</b>, чтобы открыть Quiz.
-                    </div>
-
-                    <div className="space-y-4">
-                      {practiceBlocks.map((b, idx) => {
-                        if (b.type === "exercise_mcq") {
-                          return (
-                            <ExerciseMCQ
-                              key={idx}
-                              question={b.question}
-                              options={b.options}
-                              answerIndex={b.answerIndex}
-                            />
-                          );
-                        }
-
-                        if (b.type === "exercise_input") {
-                          return (
-                            <ExerciseInput
-                              key={idx}
-                              prompt={b.prompt}
-                              answer={b.answer}
-                              accept={b.accept}
-                            />
-                          );
-                        }
-
-                        return null;
-                      })}
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-sm text-black/60">В этом уроке нет практики.</div>
-                )}
-              </div>
-            </Card>
-          ) : null}
-
-          {/* QUIZ */}
-          {step === "quiz" ? (
-            <>
-              {!canOpenQuiz ? (
-                <Card className="p-6 noise">
-                  <div className="flex items-start gap-3">
-                    <Lock className="mt-0.5 h-5 w-5 text-black/60" />
-                    <div>
-                      <div className="text-sm font-semibold text-black">Quiz закрыт</div>
-                      <div className="mt-1 text-sm text-black/60">
-                        Сначала отметь Theory и Practice как выполненные.
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              ) : (
-                <LessonQuiz
-                  lessonId={lesson.id}
-                  blocks={blocks}
-                  signedIn={userSignedIn}
-                  courseSlug={course.slug}
-                  nextHref={nextLesson ? `/lessons/${course.slug}/${nextLesson.slug}` : null}
-                />
-              )}
-            </>
-          ) : null}
+              </Card>
+            )}
+            {step === "practice" && (
+              <Card className="p-8 bg-white dark:bg-zinc-900 rounded-3xl space-y-6">
+                <h2 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
+                  Практические задания
+                </h2>
+                {practiceBlocks.map((b, idx) => {
+                  if (b.type === "exercise_mcq")
+                    return (
+                      <ExerciseMCQ
+                        key={idx}
+                        // ИСПРАВЛЕНО: Явная передача пропсов вместо {...b}
+                        question={b.question}
+                        options={b.options}
+                        answerIndex={b.answerIndex}
+                      />
+                    );
+                  if (b.type === "exercise_input")
+                    return (
+                      <ExerciseInput
+                        key={idx}
+                        // ИСПРАВЛЕНО: Явная передача пропсов вместо {...b}
+                        prompt={b.prompt}
+                        answer={b.answer}
+                        accept={b.accept}
+                      />
+                    );
+                  return null;
+                })}
+              </Card>
+            )}
+            {step === "quiz" && (
+              <LessonQuiz
+                lessonId={lesson.id}
+                blocks={blocks}
+                signedIn={userSignedIn}
+                courseSlug={course.slug}
+                nextHref={
+                  nextLesson
+                    ? `/lessons/${course.slug}/${nextLesson.slug}`
+                    : null
+                }
+              />
+            )}
+          </div>
         </main>
       </div>
     </>
@@ -493,16 +472,18 @@ function StepChip({
       onClick={onClick}
       disabled={locked}
       className={cn(
-        "inline-flex items-center gap-2 rounded-2xl border px-3 py-2 text-sm font-medium transition",
-        "bg-white/70 backdrop-blur border-black/10 hover:bg-white/90",
-        active && "border-black/20 shadow-[0_12px_26px_rgba(0,0,0,0.08)]",
-        locked && "opacity-50 cursor-not-allowed hover:bg-white/70"
+        "inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all",
+        "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300",
+        "hover:bg-zinc-200 dark:hover:bg-zinc-700",
+        active &&
+          "bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-950 shadow-md",
+        locked && "opacity-50 cursor-not-allowed hover:bg-zinc-100"
       )}
     >
       {icon}
       {title}
-      {done ? <span className="ml-1 text-xs text-emerald-700">✓</span> : null}
-      {locked ? <span className="ml-1 text-xs text-black/50">🔒</span> : null}
+      {done && <CircleCheckBig className="size-4 text-emerald-500" />}
+      {locked && <Lock className="size-4 text-zinc-400" />}
     </button>
   );
 }
@@ -511,68 +492,59 @@ function BlockRenderer({ block }: { block: any }) {
   switch (block.type) {
     case "heading":
       return (
-        <h2 className="text-xl font-semibold tracking-tight text-black">
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 mt-6 first:mt-0">
           {block.text}
         </h2>
       );
-
     case "paragraph":
       return (
-        <p className="text-sm leading-7 text-black/70 whitespace-pre-line">
+        <p className="text-base leading-7 text-zinc-700 dark:text-zinc-300 whitespace-pre-line">
           {block.text}
         </p>
       );
-
     case "video":
-      return (
-        <LessonVideo url={block.url} title={block.title} />
-      );
-
+      return <LessonVideo url={block.url} title={block.title} />;
     case "vocab":
       return (
-        <div className="rounded-3xl border border-black/10 bg-white/60 p-5 backdrop-blur">
-          <div className="text-sm font-semibold text-black">Vocabulary</div>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        <div className="rounded-3xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/50 p-6">
+          <div className="flex items-center gap-3 text-zinc-950 dark:text-zinc-50">
+            <Zap className="size-5 text-amber-500" />
+            <h3 className="text-lg font-semibold">Словарик</h3>
+          </div>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {block.items?.map((it: any, i: number) => (
               <div
                 key={i}
-                className="rounded-2xl border border-black/10 bg-white/70 p-4"
+                className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-5 shadow-sm"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <div className="font-medium text-black">{it.word}</div>
+                  <span className="font-semibold text-zinc-950 dark:text-zinc-50">
+                    {it.word}
+                  </span>
+                  {/* ИСПРАВЛЕНО: variant="secondary" -> "muted" */}
                   <Badge variant="muted">{it.translation}</Badge>
                 </div>
-                {it.example ? (
-                  <div className="mt-2 text-xs text-black/60">“{it.example}”</div>
-                ) : null}
+                {it.example && (
+                  <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400 italic">
+                    “{it.example}”
+                  </p>
+                )}
               </div>
             ))}
           </div>
         </div>
       );
-
     default:
       return null;
   }
 }
 
 function groupLessonsIntoModules(lessons: LessonNavItem[]): ModuleGroup[] {
-  const hasTags = lessons.some((l) => Array.isArray(l.tags) && l.tags.length > 0);
-  if (hasTags) {
-    const map = new Map<string, LessonNavItem[]>();
-    for (const l of lessons) {
-      const key = (l.tags?.[0] ?? "General").trim() || "General";
-      if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(l);
-    }
-    return Array.from(map.entries()).map(([title, ls]) => ({ title, lessons: ls }));
-  }
-
   const chunkSize = 5;
   const result: ModuleGroup[] = [];
   for (let i = 0; i < lessons.length; i += chunkSize) {
     result.push({
-      title: `Module ${Math.floor(i / chunkSize) + 1}`,
+      title: `Модуль ${Math.floor(i / chunkSize) + 1}`,
       lessons: lessons.slice(i, i + chunkSize),
     });
   }

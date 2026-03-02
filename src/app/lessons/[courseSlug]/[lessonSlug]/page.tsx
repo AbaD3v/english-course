@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import LessonShell from "./LessonShell";
 
@@ -10,11 +11,31 @@ type LessonNavItem = {
   tags: string[] | null;
 };
 
+// Более строгие типы прогресса
+type LessonStatus = "not_started" | "in_progress" | "done";
+
+type ProgressData = {
+  status: LessonStatus;
+  score: number | null;
+};
+
 type ProgressRow = {
   lesson_id: string;
   status: string;
   score: number | null;
 };
+
+// Динамический metadata для SEO
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ courseSlug: string; lessonSlug: string }>;
+}): Promise<Metadata> {
+  const { lessonSlug } = await params;
+  return {
+    title: `Урок: ${lessonSlug.replace(/-/g, ' ')} | EnglishCourse`,
+  };
+}
 
 export default async function LessonPage({
   params,
@@ -22,14 +43,13 @@ export default async function LessonPage({
   params: Promise<{ courseSlug: string; lessonSlug: string }>;
 }) {
   const { courseSlug, lessonSlug } = await params;
-
   const supabase = await createSupabaseServer();
 
-  // user (уроки можно смотреть без логина, прогресс — только для залогиненных)
+  // 1. Получаем пользователя
   const { data: userData } = await supabase.auth.getUser();
   const user = userData.user;
 
-  // course
+  // 2. Получаем курс
   const { data: course } = await supabase
     .from("courses")
     .select("id,slug,title")
@@ -38,7 +58,7 @@ export default async function LessonPage({
 
   if (!course) return notFound();
 
-  // nav lessons (для левого меню)
+  // 3. Получаем навигацию по урокам (для левого меню)
   const { data: navLessonsRaw } = await supabase
     .from("lessons")
     .select("id,title,slug,order_index,tags")
@@ -47,7 +67,7 @@ export default async function LessonPage({
 
   const navLessons = (navLessonsRaw ?? []) as LessonNavItem[];
 
-  // lesson
+  // 4. Получаем данные текущего урока
   const { data: lesson } = await supabase
     .from("lessons")
     .select("*")
@@ -57,9 +77,8 @@ export default async function LessonPage({
 
   if (!lesson) return notFound();
 
-  // progress map для меню (status + score)
-  const progressByLessonId: Record<string, { status: string; score: number | null }> =
-    {};
+  // 5. Получаем прогресс пользователя для этого курса
+  const progressByLessonId: Record<string, ProgressData> = {};
 
   if (user && navLessons.length) {
     const { data: progressRaw } = await supabase
@@ -72,13 +91,15 @@ export default async function LessonPage({
 
     for (const p of progress) {
       progressByLessonId[p.lesson_id] = {
-        status: p.status,
+        status: p.status as LessonStatus,
         score: typeof p.score === "number" ? p.score : null,
       };
     }
   }
 
-  const blocks = (lesson.content as any)?.blocks ?? [];
+  // 6. Подготавливаем контент блока
+  const content = lesson.content as any;
+  const blocks = content?.blocks ?? [];
 
   return (
     <LessonShell
@@ -89,6 +110,7 @@ export default async function LessonPage({
         slug: lesson.slug,
         title: lesson.title,
         order_index: lesson.order_index,
+        description: lesson.description,
       }}
       navLessons={navLessons}
       progressByLessonId={progressByLessonId}
