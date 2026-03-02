@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GraduationCap, LayoutGrid, UserRound } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";

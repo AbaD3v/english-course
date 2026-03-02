@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BookOpen, CircleCheckBig, Clock3 } from "lucide-react";
 import { createSupabaseServer } from "@/lib/supabase/server";
 
 export default async function CoursesPage() {
@@ -81,13 +82,21 @@ export default async function CoursesPage() {
                 <p className="text-sm text-white/60 mt-2 line-clamp-3">{course.description}</p>
               )}
 
+              <div className="mt-4 flex items-center gap-2 text-xs text-white/50">
+                <BookOpen className="h-3.5 w-3.5" />
+                <span>Уроки + практика</span>
+              </div>
+
               {user && progress && (
                 <div className="mt-4 space-y-2">
                   <div className="flex justify-between text-xs text-white/55">
                     <span>
                       {progress.done}/{progress.total}
                     </span>
-                    <span>{progress.percent}%</span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Clock3 className="h-3.5 w-3.5" />
+                      {progress.percent}%
+                    </span>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
                     <div className="h-full bg-white" style={{ width: `${progress.percent}%` }} />
