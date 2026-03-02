@@ -19,7 +19,7 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const redirectTo = `${SITE_URL}/profile`;
+const redirectTo = `${SITE_URL}/auth/callback`;
 
   async function signInWithGoogle() {
     setLoading(true);
@@ -193,6 +193,7 @@ export default function AuthPage() {
                       {loading ? <Loader2 className="size-4 animate-spin" /> : "Войти"}
                     </button>
                     <button
+                      type="button"
                       onClick={signUpWithPassword}
                       disabled={loading}
                       className="flex items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 active:scale-[0.97] transition-all disabled:opacity-50"
@@ -241,6 +242,7 @@ export default function AuthPage() {
                   className="space-y-4"
                 >
                   <button
+                    type="button"
                     onClick={signInWithGoogle}
                     disabled={loading}
                     className="w-full flex items-center justify-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-4 py-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 active:scale-[0.97] transition-all disabled:opacity-50 shadow-sm"

@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
-type ProgressStatus = "completed" | "in_progress" | "not_started" | string;
+type ProgressStatus = "completed" | "done" | "in_progress" | "not_started" | string;
 
 interface CourseRow {
   id: string;
@@ -71,6 +71,12 @@ export interface LessonResponse {
   top_users: Array<{ user_id: string; name: string | null; score: number }>;
 }
 
+const COMPLETED_STATUSES = new Set<ProgressStatus>(["completed", "done"]);
+
+function isCompletedStatus(status: ProgressStatus): boolean {
+  return COMPLETED_STATUSES.has(status);
+}
+
 function toIsoBoundary(from: string, to: string): { fromIso: string; toIso: string } {
   return { fromIso: `${from}T00:00:00.000Z`, toIso: `${to}T23:59:59.999Z` };
 }
@@ -96,7 +102,7 @@ function buildActivityByDay(rows: ProgressRow[]): Array<{ day: string; users: nu
     const entry = map.get(day) ?? { users: new Set<string>(), completed: 0, scores: [] };
     entry.users.add(row.user_id);
 
-    if (row.status === "completed") {
+    if (isCompletedStatus(row.status)) {
       entry.completed += 1;
       if (typeof row.score === "number") {
         entry.scores.push(row.score);
@@ -164,7 +170,7 @@ async function fetchProgressRows(
 
 export async function getOverviewReport(supabase: SupabaseClient, dateRange: DateRange): Promise<OverviewResponse> {
   const rows = await fetchProgressRows(supabase, dateRange);
-  const completedRows = rows.filter((row) => row.status === "completed");
+  const completedRows = rows.filter((row) => isCompletedStatus(row.status));
   const completedScores = safeScores(completedRows);
   const attemptedUsers = new Set(rows.map((row) => row.user_id)).size;
   const passed = completedRows.filter((row) => (row.score ?? 0) >= 70).length;
@@ -237,9 +243,10 @@ export async function getCourseReport(
     const entry =
       lessonMap.get(row.lesson_id) ??
       { title: row.lessons.title, slug: row.lessons.slug, users: new Set<string>(), completed: 0, completedScores: [], passed: 0 };
+
     entry.users.add(row.user_id);
 
-    if (row.status === "completed") {
+    if (isCompletedStatus(row.status)) {
       entry.completed += 1;
       if (typeof row.score === "number") {
         entry.completedScores.push(row.score);
@@ -289,7 +296,7 @@ export async function getLessonReport(
 
   if (!lessonData) return null;
 
-  const completedRows = rows.filter((row) => row.status === "completed");
+  const completedRows = rows.filter((row) => isCompletedStatus(row.status));
   const completedScores = safeScores(completedRows);
   const attempted = new Set(rows.map((row) => row.user_id)).size;
   const passed = completedRows.filter((row) => (row.score ?? 0) >= 70).length;

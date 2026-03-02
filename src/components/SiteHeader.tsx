@@ -49,7 +49,7 @@ export function SiteHeader({ userEmail }: { userEmail: string | null }) {
             </>
           ) : (
             <Link href="/auth">
-              <Button>Войти</Button>
+              <Button variant="secondary">Войти</Button>
             </Link>
           )}
         </nav>
