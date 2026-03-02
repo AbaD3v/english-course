@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type Result = {
@@ -50,48 +51,47 @@ export function SearchBar() {
   return (
     <div ref={boxRef} className="relative w-full max-w-md">
       <div className="relative">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#a8c0ff]/80" />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Поиск уроков… (hello, greetings, present)"
-          className="w-full rounded-xl border px-4 py-2 pr-10 outline-none focus:ring-2 focus:ring-black/10"
+          placeholder="Поиск уроков и тем..."
+          className="w-full rounded-xl border border-white/15 bg-white/[0.06] py-2 pl-9 pr-12 text-sm text-white placeholder:text-white/45 outline-none transition focus:border-[#a8c0ff]/70 focus:bg-white/[0.1]"
           onFocus={() => {
             if (results.length) setOpen(true);
           }}
         />
 
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-          {loading ? "…" : "⌘K"}
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/45">
+          {loading ? "..." : "⌘K"}
         </div>
       </div>
 
       {open && (
-        <div className="absolute z-50 mt-2 w-full rounded-xl border bg-white shadow-lg overflow-hidden">
+        <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-white/15 bg-[#0c0f18] shadow-2xl">
           {results.length === 0 ? (
-            <div className="px-4 py-3 text-sm text-muted-foreground">
-              Ничего не найдено
-            </div>
+            <div className="px-4 py-3 text-sm text-white/60">Ничего не найдено</div>
           ) : (
             results.map((r) => (
               <Link
-  key={r.id}
-  href={`/courses/${r.course_slug}#lesson-${r.slug}`}
-  onClick={() => setOpen(false)}
-  className="block px-4 py-3 hover:bg-muted transition"
->
-  <div className="text-sm font-medium">
-    {r.order_index}. {r.title}
-  </div>
-  <div className="text-xs text-muted-foreground">{r.course_slug}</div>
-</Link>
+                key={r.id}
+                href={`/courses/${r.course_slug}#lesson-${r.slug}`}
+                onClick={() => setOpen(false)}
+                className="block px-4 py-3 transition hover:bg-[#8bacff]/12"
+              >
+                <div className="text-sm font-medium text-white">
+                  {r.order_index}. {r.title}
+                </div>
+                <div className="text-xs text-white/50">{r.course_slug}</div>
+              </Link>
             ))
           )}
 
-          <div className="border-t px-4 py-2 text-xs text-muted-foreground flex items-center justify-between">
-            <span>Enter — полная страница</span>
+          <div className="flex items-center justify-between border-t border-white/10 px-4 py-2 text-xs text-white/50">
+            <span>Enter — открыть страницу поиска</span>
             <Link
               href={`/search?q=${encodeURIComponent(query.trim())}`}
-              className="underline"
+              className="text-white/85 underline underline-offset-2"
               onClick={() => setOpen(false)}
             >
               Открыть →

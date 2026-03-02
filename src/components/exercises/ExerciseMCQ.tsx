@@ -47,7 +47,7 @@ export function ExerciseMCQ({
       animate={shake ? { x: [0, -8, 8, -6, 6, -3, 3, 0] } : { x: 0 }}
       transition={{ duration: 0.42 }}
     >
-      <Card className="noise overflow-hidden p-0">
+      <Card className="noise overflow-hidden p-0 border-black/15 bg-white/90">
         <div className="p-5">
           {/* Top line */}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -79,7 +79,7 @@ export function ExerciseMCQ({
           </div>
 
           {/* Question */}
-          <div className="mt-3 text-base font-semibold tracking-tight text-black">
+          <div className="mt-3 text-lg font-semibold tracking-tight text-black">
             {question}
           </div>
 
@@ -123,13 +123,13 @@ export function ExerciseMCQ({
                     </div>
 
                     <div className="min-w-0">
-                      <div className="text-sm font-medium text-black/90">
+                      <div className="text-base font-medium text-black/90">
                         {opt}
                       </div>
 
                       {/* subtle hint line */}
                       {!checked && isSelected ? (
-                        <div className="mt-1 text-xs text-black/50">
+                        <div className="mt-1 text-sm text-black/60">
                           Нажми “Проверить”, чтобы зафиксировать ответ.
                         </div>
                       ) : null}

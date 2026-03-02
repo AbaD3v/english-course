@@ -1,4 +1,3 @@
-// components/ui/Badge.tsx
 import * as React from "react";
 import { cn } from "@/components/ui/cn";
 
@@ -11,10 +10,10 @@ export function Badge({
 }: React.HTMLAttributes<HTMLSpanElement> & { variant?: BadgeVariant }) {
   const styles =
     variant === "muted"
-      ? "border-black/10 bg-white/50 text-black/60"
+      ? "border-black/15 bg-black/5 text-black/65"
       : variant === "success"
-      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-      : "border-black/10 bg-white/70 text-black/80";
+      ? "border-emerald-300/30 bg-emerald-400/10 text-emerald-200"
+      : "border-black/15 bg-white/75 text-black/75";
 
   return (
     <span
