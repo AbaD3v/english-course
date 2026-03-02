@@ -35,33 +35,23 @@ export default async function RootLayout({
 
   return (
     <html lang="ru">
-      <body className="min-h-screen bg-[#f7f7f8]">
+      <body className="min-h-screen bg-[#030303] text-white">
         <AppSidebar activeCourseSlug={activeCourseSlug} pathname={pathname} />
 
-        {/* Right side */}
         <div className="lg:pl-[288px] min-h-screen">
           <SiteHeader userEmail={data.user?.email ?? null} />
 
           <main className="min-h-[calc(100vh-64px)]">
-            {/* app padding like ChatGPT */}
             <div className="px-4 sm:px-6 lg:px-10">
-              <div className="mx-auto max-w-6xl py-8">{children}</div>
+              <div className="mx-auto max-w-6xl py-10">{children}</div>
             </div>
           </main>
 
-          <footer className="mt-10 border-t border-black/10 bg-white/40 backdrop-blur">
+          <footer className="border-t border-white/10 bg-black/50 backdrop-blur">
             <div className="px-4 sm:px-6 lg:px-10">
-              <div className="mx-auto max-w-6xl py-10">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <div className="text-sm font-semibold text-black">
-                      © {new Date().getFullYear()} EnglishCourse
-                    </div>
-                    <div className="mt-1 text-xs text-black/50">
-                      Next.js + Supabase + Tailwind
-                    </div>
-                  </div>
-                </div>
+              <div className="mx-auto max-w-6xl py-8 text-sm text-white/55 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
+                <span>© {new Date().getFullYear()} EnglishCourse</span>
+                <span className="text-white/35">Built with Next.js + Supabase</span>
               </div>
             </div>
           </footer>
