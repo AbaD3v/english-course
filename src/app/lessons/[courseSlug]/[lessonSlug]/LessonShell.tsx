@@ -138,7 +138,7 @@ export default function LessonShell({
     <Card className="p-4 noise">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="text-xs text-black/50">Course</div>
+          <div className="text-sm text-black/55">Course</div>
           <div className="truncate text-sm font-semibold text-black">
             {course.title}
           </div>
@@ -303,10 +303,10 @@ export default function LessonShell({
           <Card className="p-4 noise">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <div className="text-xs text-black/50">
+                <div className="text-sm text-black/55">
                   Lesson {lesson.order_index}/{navLessons.length}
                 </div>
-                <div className="truncate text-lg font-semibold text-black">
+                <div className="truncate text-2xl font-semibold text-black">
                   {lesson.title}
                 </div>
               </div>
@@ -337,7 +337,7 @@ export default function LessonShell({
             </div>
 
             <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-              <div className="text-sm text-black/60">
+              <div className="text-base leading-relaxed text-black/70">
                 {step === "theory" && "Прочитай материал (и посмотри видео, если есть). Потом отметь шаг выполненным."}
                 {step === "practice" && "Сделай упражнения. Потом откроется Quiz."}
                 {step === "quiz" && "Закрой квиз и сохрани score."}
@@ -434,7 +434,7 @@ export default function LessonShell({
                     </div>
                   </>
                 ) : (
-                  <div className="text-sm text-black/60">В этом уроке нет практики.</div>
+                  <div className="text-base leading-relaxed text-black/70">В этом уроке нет практики.</div>
                 )}
               </div>
             </Card>
