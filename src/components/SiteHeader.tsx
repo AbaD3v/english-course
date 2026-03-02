@@ -7,20 +7,20 @@ import { SearchBar } from "@/components/SearchBar";
 
 export function SiteHeader({ userEmail }: { userEmail: string | null }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#06070b]/80 backdrop-blur-xl">
-      <Container className="flex items-center gap-4 py-3">
-        <Link href="/" className="group flex items-center gap-3">
-          <div className="grid h-10 w-10 place-items-center rounded-xl border border-[#7da2ff]/35 bg-[#7da2ff]/15 text-[#c6d5ff] transition group-hover:bg-[#7da2ff]/25">
-            <GraduationCap className="h-4 w-4" />
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-black/70 backdrop-blur-xl">
+      <Container className="py-3 flex items-center gap-4">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="h-9 w-9 rounded-xl border border-white/20 bg-white/10 text-white grid place-items-center text-sm font-semibold transition group-hover:bg-white/20">
+            EC
           </div>
 
           <div className="leading-tight">
-            <div className="font-semibold tracking-tight text-white">EnglishCourse</div>
-            <div className="-mt-0.5 text-xs text-white/55">Practical English path for consistent progress</div>
+            <div className="font-semibold text-white tracking-tight">EnglishCourse</div>
+            <div className="text-xs text-white/55 -mt-0.5">Structured learning with modern UX</div>
           </div>
         </Link>
 
-        <div className="hidden flex-1 md:block">
+        <div className="hidden md:block flex-1">
           <div className="mx-auto max-w-xl">
             <SearchBar />
           </div>
@@ -28,22 +28,16 @@ export function SiteHeader({ userEmail }: { userEmail: string | null }) {
 
         <nav className="ml-auto flex items-center gap-2">
           <Link href="/courses">
-            <Button variant="ghost">
-              <LayoutGrid className="h-4 w-4" />
-              Курсы
-            </Button>
+            <Button variant="ghost">Курсы</Button>
           </Link>
 
           {userEmail ? (
             <>
-              <Badge className="hidden border-white/20 bg-white/10 text-white/80 xl:inline-flex">
+              <Badge className="hidden sm:inline-flex border-white/15 bg-white/10 text-white/75">
                 {userEmail}
               </Badge>
               <Link href="/profile">
-                <Button variant="secondary">
-                  <UserRound className="h-4 w-4" />
-                  Профиль
-                </Button>
+                <Button variant="secondary">Профиль</Button>
               </Link>
             </>
           ) : (
@@ -54,7 +48,7 @@ export function SiteHeader({ userEmail }: { userEmail: string | null }) {
         </nav>
       </Container>
 
-      <Container className="pb-3 md:hidden">
+      <Container className="md:hidden pb-3">
         <SearchBar />
       </Container>
     </header>

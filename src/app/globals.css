@@ -2,8 +2,8 @@
 @reference "tailwindcss";
 
 :root {
-  --background: #0b0b0e;
-  --foreground: #f4f4f5;
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
 }
 
 @layer base {
@@ -13,13 +13,12 @@
   }
 
   body {
-    @apply text-neutral-100 antialiased;
-    font-family: var(--font-app), Inter, ui-sans-serif, system-ui, sans-serif;
-    background-color: #050508;
+    @apply antialiased text-neutral-100;
+    background-color: #030303;
     background-image:
-      radial-gradient(860px 520px at 8% -10%, rgba(86, 123, 255, 0.18), transparent 60%),
-      radial-gradient(800px 480px at 90% -5%, rgba(255, 255, 255, 0.11), transparent 55%),
-      linear-gradient(180deg, #0b0c11 0%, #060609 45%, #030305 100%);
+      radial-gradient(900px 500px at 12% -8%, rgba(255, 255, 255, 0.13), transparent 55%),
+      radial-gradient(900px 500px at 88% -8%, rgba(255, 255, 255, 0.09), transparent 55%),
+      linear-gradient(180deg, #070707 0%, #030303 45%, #020202 100%);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -31,7 +30,7 @@
   }
 
   ::selection {
-    background: rgba(125, 162, 255, 0.28);
+    background: rgba(255, 255, 255, 0.18);
     color: #fff;
   }
 }
@@ -47,14 +46,14 @@
     inset: 0;
     pointer-events: none;
     border-radius: inherit;
-    opacity: 0.15;
+    opacity: 0.18;
     mix-blend-mode: soft-light;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
   }
 }
 
 :focus-visible {
-  outline: 2px solid rgba(133, 164, 255, 0.85);
+  outline: 2px solid rgba(255, 255, 255, 0.45);
   outline-offset: 2px;
   border-radius: 10px;
 }
@@ -69,12 +68,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(140, 171, 255, 0.35);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 999px;
-  border: 2px solid rgba(5, 5, 7, 0.6);
+  border: 2px solid rgba(0, 0, 0, 0.2);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(140, 171, 255, 0.4) rgba(255, 255, 255, 0.03);
+  scrollbar-color: rgba(255, 255, 255, 0.22) rgba(255, 255, 255, 0.03);
 }

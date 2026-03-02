@@ -43,18 +43,15 @@ export default async function CoursesPage() {
 
   return (
     <main className="space-y-8">
-      <div className="max-w-3xl">
-        <p className="text-xs uppercase tracking-[0.24em] text-[#a8c0ff]">Course library</p>
+      <div className="max-w-2xl">
+        <p className="text-xs uppercase tracking-[0.24em] text-white/45">Library</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Курсы</h1>
-        <p className="mt-2 text-sm leading-relaxed text-white/65 sm:text-base">
-          Сначала фундамент, затем практика и закрепление. На десктопе карточки читаются быстрее за счёт
-          более контрастной типографики и визуальных индикаторов.
-        </p>
+        <p className="mt-2 text-sm text-white/60">Выбери курс и двигайся последовательно: урок → практика → прогресс.</p>
       </div>
 
       {!user && (
-        <div className="rounded-2xl border border-[#8bacff]/30 bg-[#8bacff]/10 p-4 text-sm text-[#d6e2ff]">
-          Войди, чтобы сохранять прогресс и продолжать с места, где остановился.
+        <div className="rounded-2xl border border-white/15 bg-white/[0.03] p-4 text-sm text-white/65">
+          Войди, чтобы сохранять прогресс.
           <Link href="/auth" className="ml-2 underline underline-offset-4 text-white">
             Войти
           </Link>
@@ -69,20 +66,20 @@ export default async function CoursesPage() {
             <Link
               key={course.id}
               href={`/courses/${course.slug}`}
-              className="group rounded-2xl border border-white/12 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-5 transition hover:-translate-y-0.5 hover:border-[#8bacff]/35 hover:shadow-[0_20px_50px_rgba(18,39,95,0.28)]"
+              className="group rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.06]"
             >
               <div className="flex items-center justify-between gap-3">
-                <h2 className="text-lg font-semibold text-white">{course.title}</h2>
+                <h2 className="font-medium text-lg text-white">{course.title}</h2>
 
                 {course.level && (
-                  <span className="rounded-full border border-white/20 bg-white/10 px-2 py-1 text-xs text-white/85">
+                  <span className="text-xs rounded-full border border-white/20 bg-white/10 px-2 py-1 text-white/80">
                     {course.level}
                   </span>
                 )}
               </div>
 
               {course.description && (
-                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/65">{course.description}</p>
+                <p className="text-sm text-white/60 mt-2 line-clamp-3">{course.description}</p>
               )}
 
               <div className="mt-4 flex items-center gap-2 text-xs text-white/50">
@@ -92,9 +89,8 @@ export default async function CoursesPage() {
 
               {user && progress && (
                 <div className="mt-4 space-y-2">
-                  <div className="flex items-center justify-between text-xs text-white/60">
-                    <span className="inline-flex items-center gap-1.5">
-                      <CircleCheckBig className="h-3.5 w-3.5 text-[#a8c0ff]" />
+                  <div className="flex justify-between text-xs text-white/55">
+                    <span>
                       {progress.done}/{progress.total}
                     </span>
                     <span className="inline-flex items-center gap-1.5">
@@ -102,8 +98,8 @@ export default async function CoursesPage() {
                       {progress.percent}%
                     </span>
                   </div>
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-                    <div className="h-full bg-[#a8c0ff]" style={{ width: `${progress.percent}%` }} />
+                  <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                    <div className="h-full bg-white" style={{ width: `${progress.percent}%` }} />
                   </div>
                 </div>
               )}
