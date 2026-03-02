@@ -14,12 +14,23 @@ export function Button({
 }: Props) {
   const v =
     variant === "primary"
-      ? "bg-white text-black border-white/80 hover:bg-white/90 shadow-[0_10px_30px_rgba(255,255,255,0.2)]"
+      ? cn(
+          "bg-white text-black border-black/20 hover:bg-black/90",
+          "shadow-[0_10px_30px_rgba(0,0,0,0.18)]",
+          "dark:bg-dark dark:text-white dark:border-white/20 dark:hover:bg-white/90",
+          "dark:shadow-[0_10px_30px_rgba(255,255,255,0.08)]"
+        )
       : variant === "secondary"
-      ? "bg-white/10 text-white border-white/20 hover:bg-white/15"
+      ? cn(
+          "bg-white text-black border-black/10 hover:bg-black/10",
+          "dark:bg-black/10 dark:text-white dark:border-white/15 dark:hover:bg-white/15"
+        )
       : variant === "danger"
-      ? "bg-red-600 text-white border-red-500 hover:bg-red-500"
-      : "bg-transparent text-white/80 border-transparent hover:bg-white/10 hover:text-white";
+      ? "bg-red-600 text-white dark:bg-red-500 dark:text-dark border-red-500 hover:bg-red-500"
+      : cn(
+          "bg-transparent text-black/80 border-transparent hover:bg-black/5 hover:text-black",
+          "dark:text-white/80 dark:hover:bg-white/10 dark:hover:text-white"
+        );
 
   const s =
     size === "sm"
@@ -33,7 +44,8 @@ export function Button({
       className={cn(
         "inline-flex items-center justify-center gap-2 font-medium transition",
         "disabled:opacity-50 disabled:cursor-not-allowed",
-        "focus-visible:outline-none",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+        "dark:focus-visible:ring-white/20 dark:focus-visible:ring-offset-black",
         variant !== "ghost" && "border",
         v,
         s,

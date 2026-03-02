@@ -182,7 +182,7 @@ export default async function CoursePage({
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
               {continueHref && (
-                <Button size="lg" className="rounded-2xl">
+                <Button size="lg" variant="secondary" className="rounded-2xl">
                   <Link href={continueHref} className="flex items-center gap-2">
                     Продолжить <span className="font-normal opacity-80">{continueText}</span>
                   </Link>

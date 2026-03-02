@@ -102,6 +102,23 @@ export default function LessonShell({
   const [step, setStep] = useState<Step>("theory");
   const [theoryDone, setTheoryDone] = useState(false);
   const [practiceDone, setPracticeDone] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    if (typeof window === "undefined") return "dark";
+    try {
+      const t = localStorage.getItem("ec-theme");
+      return t === "light" ? "light" : "dark";
+    } catch {
+      return "dark";
+    }
+  });
+
+  useEffect(() => {
+    const update = () => setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
   const canOpenQuiz = theoryDone && practiceDone;
 
   const [cmdOpen, setCmdOpen] = useState(false);
@@ -360,6 +377,7 @@ export default function LessonShell({
                       setStep("practice");
                     }}
                     className="gap-2 rounded-xl"
+                    variant={theme === "dark" ? "secondary" : undefined}
                   >
                     <CheckCircle2 className="size-4" />
                     Теория пройдена
@@ -372,6 +390,7 @@ export default function LessonShell({
                     }}
                     disabled={!theoryDone}
                     className="gap-2 rounded-xl"
+                    variant={theme === "dark" ? "secondary" : undefined}
                   >
                     <CheckCircle2 className="size-4" />
                     Практика пройдена
@@ -517,7 +536,7 @@ function StepChip({
       className={cn(
         "inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all",
         "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
-        active && "bg-zinc-900 text-white shadow-md dark:bg-white dark:text-zinc-900",
+        active && "bg-zinc-900 text-white shadow-md dark:bg-white/10 dark:text-white",
         locked && "cursor-not-allowed opacity-50 hover:bg-zinc-100 dark:hover:bg-zinc-800"
       )}
     >

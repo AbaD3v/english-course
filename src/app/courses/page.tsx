@@ -63,7 +63,7 @@ export default async function CoursesPage() {
         <p className="text-xs font-medium uppercase tracking-[0.22em] text-zinc-500">
           Library
         </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
           Курсы
         </h1>
         <p className="mt-2 text-sm text-zinc-600">

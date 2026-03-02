@@ -188,6 +188,7 @@ export function LessonQuiz({
             <div className="flex items-center gap-2">
               <Button
                 type="button"
+                variant="secondary"
                 onClick={submit}
                 disabled={!canSubmit}
                 className="gap-2 rounded-xl"
@@ -255,7 +256,7 @@ export function LessonQuiz({
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-4 w-4 text-amber-500" />
                   <div>
-                    <div className="text-sm font-semibold text-primary">
+                    <div className="text-sm font-semibold text-black dark:text-white">
                       Проверь все упражнения
                     </div>
                     <div className="mt-1 text-xs text-secondary">

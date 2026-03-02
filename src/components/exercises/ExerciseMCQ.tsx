@@ -168,6 +168,7 @@ export function ExerciseMCQ({
               type="button"
               onClick={onCheck}
               disabled={selected === null || checked}
+              variant="secondary"
               className="gap-2"
             >
               {checked ? (
@@ -185,7 +186,7 @@ export function ExerciseMCQ({
               ) : (
                 <>
                   Проверить
-                  <span className="text-white/70">↵</span>
+                  <span className="text-black dark:text-white">↵</span>
                 </>
               )}
             </Button>

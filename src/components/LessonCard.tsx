@@ -36,11 +36,11 @@ export function LessonCard({
     <Link
       href={href}
       className={cn(
-        "group block rounded-3xl border border-black/10 bg-white/80 backdrop-blur",
+        "group block rounded-3xl border border-black/10 bg-white dark:bg-black backdrop-blur",
         "shadow-[0_18px_50px_rgba(0,0,0,0.06)]",
         "transition-all duration-200",
-        "hover:-translate-y-0.5 hover:shadow-[0_26px_70px_rgba(0,0,0,0.10)] hover:bg-white/90",
-        "focus:outline-none focus:ring-2 focus:ring-black/10",
+        "hover:-translate-y-0.5 hover:shadow-[0_26px_70px_rgba(0,0,0,0.10)] hover:bg-white dark:hover:bg-zinc-850/95",
+        "focus:outline-none focus:ring-2 focus:ring-black/10 dark:focus:ring-white/15",
         className
       )}
     >

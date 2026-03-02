@@ -5,11 +5,31 @@
 :root {
   --background: #f7f7f8;
   --foreground: #111111;
+  /* Tailwind-compatible HSL variables (used by tailwind.config.ts colors) */
+  --bg: 0 0% 97%; /* light page background */
+  --card: 0 0% 100%; /* card / surface */
+  --text: 0 0% 7%; /* main text */
+  --muted: 210 8% 55%;
+  --border: 210 8% 90%;
+  --accent: 222 90% 55%;
+  --accent-fg: 222 100% 98%;
+  --danger: 0 85% 60%;
+  --success: 140 50% 40%;
 }
 
 html.dark {
   --background: #030303;
   --foreground: #f5f5f5;
+  /* Dark theme HSL variables */
+  --bg: 210 8% 3%;
+  --card: 210 6% 7%;
+  --text: 0 0% 95%;
+  --muted: 210 6% 60%;
+  --border: 210 6% 15%;
+  --accent: 222 80% 60%;
+  --accent-fg: 222 100% 98%;
+  --danger: 0 85% 60%;
+  --success: 140 50% 40%;
 }
 
 @layer base {
@@ -21,6 +41,7 @@ html.dark {
 
   body {
     @apply antialiased;
+    /* Use both legacy hex variables and new HSL vars (Tailwind uses HSL via --bg) */
     background-color: var(--background);
     color: var(--foreground);
     background-image:
@@ -33,6 +54,8 @@ html.dark {
   }
 
   html.dark body {
+    /* dark background uses HSL var for consistency with Tailwind colors */
+    background-color: hsl(var(--bg));
     background-image:
       radial-gradient(900px 500px at 12% -8%, rgba(255, 255, 255, 0.13), transparent 55%),
       radial-gradient(900px 500px at 88% -8%, rgba(255, 255, 255, 0.09), transparent 55%),

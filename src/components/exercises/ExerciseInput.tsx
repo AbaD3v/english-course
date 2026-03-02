@@ -151,6 +151,7 @@ export function ExerciseInput({
                 type="button"
                 onClick={onCheck}
                 disabled={!value.trim() || checked}
+                variant="secondary"
                 className="gap-2"
               >
                 {checked ? (
@@ -168,7 +169,7 @@ export function ExerciseInput({
                 ) : (
                   <>
                     Проверить
-                    <span className="text-white/70">↵</span>
+                    <span className="text-current opacity-70">↵</span>
                   </>
                 )}
               </Button>

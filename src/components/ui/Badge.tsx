@@ -10,10 +10,19 @@ export function Badge({
 }: React.HTMLAttributes<HTMLSpanElement> & { variant?: BadgeVariant }) {
   const styles =
     variant === "muted"
-      ? "border-white/15 bg-white/5 text-white/60"
+      ? cn(
+          "border-black/10 bg-black/5 text-black/70",
+          "dark:border-white/10 dark:bg-white/10 dark:text-white/80"
+        )
       : variant === "success"
-      ? "border-emerald-300/30 bg-emerald-400/10 text-emerald-200"
-      : "border-white/20 bg-white/10 text-white/80";
+      ? cn(
+          "border-emerald-600/20 bg-emerald-500/10 text-emerald-700",
+          "dark:border-emerald-300/20 dark:bg-emerald-400/10 dark:text-emerald-200"
+        )
+      : cn(
+          "border-black/10 bg-black/5 text-black/80",
+          "dark:border-white/10 dark:bg-white/10 dark:text-white/90"
+        );
 
   return (
     <span
