@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Toaster } from "sonner";
 import { AppSidebar } from "@/components/AppSidebar";
 import { headers } from "next/headers";
+
+const appFont = localFont({
+  src: [
+    { path: "../assets/fonts/NotoSans-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../assets/fonts/NotoSans-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-app",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "EnglishCourse",
