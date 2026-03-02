@@ -86,7 +86,7 @@ export function ExerciseInput({
       animate={shake ? { x: [0, -8, 8, -6, 6, -3, 3, 0] } : { x: 0 }}
       transition={{ duration: 0.42 }}
     >
-      <Card className="noise overflow-hidden p-0">
+      <Card className="noise overflow-hidden p-0 border-black/15 bg-white/90">
         <div className="p-5">
           {/* Top line */}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -101,7 +101,7 @@ export function ExerciseInput({
           </div>
 
           {/* Prompt */}
-          <div className="mt-3 text-base font-semibold tracking-tight text-black">
+          <div className="mt-3 text-lg font-semibold tracking-tight text-black">
             {prompt}
           </div>
 
@@ -126,7 +126,7 @@ export function ExerciseInput({
                   }}
                   disabled={checked}
                   className={cn(
-                    "w-full bg-transparent text-sm outline-none placeholder:text-black/40",
+                    "w-full bg-transparent text-base outline-none placeholder:text-black/45",
                     "disabled:cursor-not-allowed"
                   )}
                   placeholder="Type your answer…"
@@ -140,7 +140,7 @@ export function ExerciseInput({
             </div>
 
             {!checked ? (
-              <div className="mt-2 text-xs text-black/50">
+              <div className="mt-2 text-sm text-black/60">
                 Подсказка: без лишних пробелов — мы нормализуем ввод.
               </div>
             ) : null}
@@ -188,7 +188,7 @@ export function ExerciseInput({
               ) : null}
             </div>
 
-            <div className="text-xs text-black/50">
+            <div className="text-sm text-black/60">
               {checked ? (
                 correct ? (
                   <span className="font-medium text-emerald-700">
@@ -227,7 +227,7 @@ export function ExerciseInput({
                       </div>
 
                       {Array.isArray(accept) && accept.length ? (
-                        <div className="mt-2 text-xs text-black/50">
+                        <div className="mt-2 text-sm text-black/60">
                           Также принимается:{" "}
                           <span className="text-black/70">
                             {accept.join(", ")}

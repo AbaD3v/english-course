@@ -66,7 +66,7 @@ export async function AppSidebar({
               <div className="text-sm font-semibold tracking-tight">
                 EnglishCourse
               </div>
-              <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+              <div className="mt-1 text-sm text-white/55">
                 Learn • Practice • Quiz
               </div>
             </div>
@@ -92,7 +92,7 @@ export async function AppSidebar({
         {/* Scroll */}
         <div className="flex-1 overflow-auto px-3 pb-4 pt-4">
           {/* Courses */}
-          <div className="px-2 pb-2 text-[11px] font-semibold tracking-wider text-zinc-500 dark:text-zinc-400">
+          <div className="px-2 pb-2 text-xs font-semibold tracking-wider text-white/45">
             COURSES
           </div>
 
@@ -112,7 +112,7 @@ export async function AppSidebar({
                   <div className="min-w-0">
                     <div className="truncate">{c.title}</div>
                     {c.level ? (
-                      <div className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                      <div className="mt-0.5 text-sm text-white/55">
                         {c.level}
                       </div>
                     ) : null}
@@ -128,12 +128,12 @@ export async function AppSidebar({
 
           {/* Outline */}
           <div className="mt-5">
-            <div className="px-2 pb-2 text-[11px] font-semibold tracking-wider text-zinc-500 dark:text-zinc-400">
+            <div className="px-2 pb-2 text-xs font-semibold tracking-wider text-white/45">
               OUTLINE
             </div>
 
             {!activeCourse ? (
-              <div className="px-3 text-xs text-zinc-500 dark:text-zinc-400">
+              <div className="px-3 text-sm text-white/55">
                 Выбери курс — появится список уроков.
               </div>
             ) : (
@@ -141,7 +141,7 @@ export async function AppSidebar({
                 {modules.map((m) => (
                   <div key={m.title}>
                     <div className="flex items-center justify-between px-2">
-                      <div className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                      <div className="text-sm font-semibold text-white/70">
                         {m.title}
                       </div>
                       <div className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -169,7 +169,7 @@ export async function AppSidebar({
                                 : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                             )}
                           >
-                            <span className="w-7 shrink-0 text-xs text-zinc-400">
+                            <span className="w-8 shrink-0 text-sm text-white/45">
                               {l.order_index}.
                             </span>
                             <span className="truncate">{l.title}</span>
@@ -192,7 +192,7 @@ export async function AppSidebar({
           </div>
         </div>
 
-        <div className="border-t border-zinc-100 dark:border-zinc-800 px-4 py-3 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="border-t border-white/10 px-4 py-3 text-sm text-white/55">
           Tip: Ctrl/⌘ + K to search
         </div>
       </div>

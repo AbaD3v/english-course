@@ -5,7 +5,7 @@ import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
 
-import { cn } from "@/components/ui/cn";
+import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -147,28 +147,29 @@ export default function LessonShell({
   );
 
   const sidebar = (
-    <Card className="p-3 bg-zinc-50 dark:bg-zinc-950/50 h-full flex flex-col">
+    <Card className="h-full p-3 ring-1 ring-zinc-200/60 bg-white/70 backdrop-blur-xl shadow-sm">
       <div className="flex items-start justify-between gap-2 p-2">
         <div className="min-w-0">
-          <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
-            Курс
+          <div className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-500">
+            Course
           </div>
-          <div className="truncate text-sm font-semibold text-zinc-950 dark:text-zinc-50 mt-0.5">
+          <div className="truncate text-sm font-semibold text-zinc-900">
             {course.title}
           </div>
         </div>
-        <Link href={`/courses/${course.slug}`}>
+
+        <Link href={`/courses/${course.slug}`} aria-label="Back to course">
           <Button variant="ghost" size="sm" className="px-2">
             <BookMarked className="size-4" />
           </Button>
         </Link>
       </div>
 
-      <div className="mt-4 flex-grow overflow-y-auto space-y-4 pr-1">
+      <div className="mt-4 flex grow flex-col gap-4 overflow-y-auto pr-1">
         {modules.map((m) => (
           <div key={m.title}>
             <div className="mb-2 flex items-center justify-between px-2">
-              <div className="text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+              <div className="text-xs font-semibold text-zinc-600">
                 {m.title}
               </div>
             </div>
@@ -187,29 +188,28 @@ export default function LessonShell({
                   >
                     <div
                       className={cn(
-                        "group rounded-xl px-3 py-2 transition-all flex items-center gap-3",
-                        "hover:bg-zinc-100 dark:hover:bg-zinc-900",
-                        active &&
-                          "bg-zinc-100 dark:bg-zinc-800/60 shadow-inner"
+                        "group flex items-center gap-3 rounded-xl px-3 py-2 transition-all",
+                        "hover:bg-zinc-100",
+                        active && "bg-zinc-100 shadow-inner"
                       )}
                     >
                       {status === "done" ? (
                         <CircleCheckBig className="size-4 text-emerald-500" />
                       ) : (
-                        <div className="size-4 rounded-full border-2 border-zinc-300 dark:border-zinc-700 group-hover:border-zinc-400" />
+                        <div className="size-4 rounded-full border-2 border-zinc-300 group-hover:border-zinc-400" />
                       )}
-                      <div className="min-w-0 flex-grow">
+
+                      <div className="min-w-0 flex-1">
                         <div
                           className={cn(
                             "truncate text-sm font-medium",
-                            active
-                              ? "text-zinc-950 dark:text-zinc-50"
-                              : "text-zinc-700 dark:text-zinc-300"
+                            active ? "text-zinc-950" : "text-zinc-700"
                           )}
                         >
                           {l.order_index}. {l.title}
                         </div>
                       </div>
+
                       <ChevronRight className="size-4 text-zinc-400" />
                     </div>
                   </Link>
@@ -233,22 +233,23 @@ export default function LessonShell({
             className="w-full max-w-xl"
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <Card className="p-0 overflow-hidden shadow-2xl">
+            <Card className="overflow-hidden p-0 shadow-2xl ring-1 ring-zinc-200/60 bg-white/90 backdrop-blur-xl">
               <Command className="w-full">
-                <div className="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 px-4 py-3">
+                <div className="flex items-center gap-2 border-b border-zinc-200/70 px-4 py-3">
                   <Search className="size-5 text-zinc-400" />
                   <Command.Input
                     autoFocus
                     placeholder="Поиск по урокам..."
                     className="w-full bg-transparent text-sm outline-none placeholder:text-zinc-400"
                   />
-                  {/* ИСПРАВЛЕНО: variant="outline" -> "muted" */}
                   <Badge variant="muted">ESC</Badge>
                 </div>
+
                 <Command.List className="max-h-[420px] overflow-auto p-2">
                   <Command.Empty className="p-4 text-sm text-zinc-500">
                     Ничего не найдено.
                   </Command.Empty>
+
                   {modules.map((m) => (
                     <Command.Group
                       key={m.title}
@@ -265,7 +266,7 @@ export default function LessonShell({
                           }}
                           className={cn(
                             "flex cursor-pointer items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm",
-                            "aria-selected:bg-zinc-100 dark:aria-selected:bg-zinc-800"
+                            "aria-selected:bg-zinc-100"
                           )}
                         >
                           <span className="truncate">
@@ -285,36 +286,38 @@ export default function LessonShell({
         </div>
       ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-[auto_12px_1fr] h-screen overflow-hidden">
-        <aside className="hidden lg:block h-screen p-4 pr-0" style={{ width }}>
+      <div className="grid h-[calc(100vh-64px)] gap-4 lg:grid-cols-[auto_12px_1fr] overflow-hidden">
+        <aside className="hidden h-full lg:block p-4 pr-0" style={{ width }}>
           {sidebar}
         </aside>
 
         <div
           className="relative hidden lg:block cursor-col-resize group"
           onMouseDown={startDrag}
+          aria-hidden
         >
-          <div className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 group-hover:bg-zinc-300 dark:group-hover:bg-zinc-700 transition-colors" />
+          <div className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 transition-colors group-hover:bg-zinc-300" />
         </div>
 
-        <main className="h-screen overflow-y-auto p-4 md:p-6 space-y-6">
+        <main className="h-full overflow-y-auto p-4 md:p-6 space-y-6">
           <div className="lg:hidden">{sidebar}</div>
 
-          <Card className="p-6 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 rounded-3xl">
+          <Card className="rounded-3xl border border-zinc-200/70 bg-white/70 p-6 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <div className="text-sm font-medium text-zinc-500">
-                  Урок {lesson.order_index} из {navLessons.length}
+                <div className="text-sm text-zinc-500">
+                  Lesson {lesson.order_index}/{navLessons.length}
                 </div>
-                <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 mt-1">
+                <h1 className="truncate text-2xl font-semibold tracking-tight text-zinc-900">
                   {lesson.title}
                 </h1>
-                {lesson.description && (
-                  <p className="text-zinc-600 dark:text-zinc-400 mt-2 max-w-2xl">
+                {lesson.description ? (
+                  <p className="mt-2 max-w-2xl text-sm text-zinc-600">
                     {lesson.description}
                   </p>
-                )}
+                ) : null}
               </div>
+
               <div className="flex flex-wrap items-center gap-2">
                 <StepChip
                   active={step === "theory"}
@@ -340,15 +343,16 @@ export default function LessonShell({
               </div>
             </div>
 
-            <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
-              <div className="text-sm text-zinc-600 dark:text-zinc-400">
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+              <div className="text-sm leading-relaxed text-zinc-600">
                 {step === "theory" &&
-                  "Изучите материал. Затем нажмите «Теория пройдена»."}
+                  "Прочитай материал (и посмотри видео, если есть). Потом отметь шаг выполненным."}
                 {step === "practice" &&
-                  "Выполните упражнения, чтобы открыть Quiz."}
-                {step === "quiz" && "Пройдите тест и сохраните результат."}
+                  "Сделай упражнения. Потом откроется Quiz."}
+                {step === "quiz" && "Закрой квиз и сохрани score."}
               </div>
-              <div className="flex items-center gap-2">
+
+              <div className="flex flex-wrap items-center gap-2">
                 {step === "theory" ? (
                   <Button
                     onClick={() => {
@@ -373,17 +377,17 @@ export default function LessonShell({
                     Практика пройдена
                   </Button>
                 ) : null}
+
                 {prevLesson ? (
                   <Link href={`/lessons/${course.slug}/${prevLesson.slug}`}>
-                    {/* ИСПРАВЛЕНО: variant="outline" -> "secondary" */}
                     <Button variant="secondary" className="rounded-xl">
                       ← Назад
                     </Button>
                   </Link>
                 ) : null}
+
                 {nextLesson ? (
                   <Link href={`/lessons/${course.slug}/${nextLesson.slug}`}>
-                    {/* ИСПРАВЛЕНО: variant="outline" -> "secondary" */}
                     <Button variant="secondary" className="rounded-xl">
                       Вперед →
                     </Button>
@@ -393,58 +397,97 @@ export default function LessonShell({
             </div>
           </Card>
 
-          <div className="space-y-6">
-            {step === "theory" && (
-              <Card className="p-8 bg-white dark:bg-zinc-900 rounded-3xl space-y-8">
+          {/* THEORY */}
+          {step === "theory" ? (
+            <Card className="rounded-3xl border border-zinc-200/70 bg-white/70 p-8 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl">
+              <div className="space-y-8">
                 {theoryBlocks.map((b, i) => (
                   <BlockRenderer key={i} block={b} />
                 ))}
-              </Card>
-            )}
-            {step === "practice" && (
-              <Card className="p-8 bg-white dark:bg-zinc-900 rounded-3xl space-y-6">
-                <h2 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
-                  Практические задания
-                </h2>
-                {practiceBlocks.map((b, idx) => {
-                  if (b.type === "exercise_mcq")
-                    return (
-                      <ExerciseMCQ
-                        key={idx}
-                        // ИСПРАВЛЕНО: Явная передача пропсов вместо {...b}
-                        question={b.question}
-                        options={b.options}
-                        answerIndex={b.answerIndex}
-                      />
-                    );
-                  if (b.type === "exercise_input")
-                    return (
-                      <ExerciseInput
-                        key={idx}
-                        // ИСПРАВЛЕНО: Явная передача пропсов вместо {...b}
-                        prompt={b.prompt}
-                        answer={b.answer}
-                        accept={b.accept}
-                      />
-                    );
-                  return null;
-                })}
-              </Card>
-            )}
-            {step === "quiz" && (
-              <LessonQuiz
-                lessonId={lesson.id}
-                blocks={blocks}
-                signedIn={userSignedIn}
-                courseSlug={course.slug}
-                nextHref={
-                  nextLesson
-                    ? `/lessons/${course.slug}/${nextLesson.slug}`
-                    : null
-                }
-              />
-            )}
-          </div>
+              </div>
+            </Card>
+          ) : null}
+
+          {/* PRACTICE */}
+          {step === "practice" ? (
+            <Card className="rounded-3xl border border-zinc-200/70 bg-white/70 p-6 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl">
+              <div className="space-y-4">
+                {practiceBlocks.length ? (
+                  <>
+                    <div className="text-sm text-zinc-700">
+                      Сделай упражнения и нажми <b>Практика пройдена</b>, чтобы
+                      открыть Quiz.
+                    </div>
+
+                    <div className="space-y-4">
+                      {practiceBlocks.map((b, idx) => {
+                        if (b.type === "exercise_mcq") {
+                          return (
+                            <ExerciseMCQ
+                              key={idx}
+                              question={b.question}
+                              options={b.options}
+                              answerIndex={b.answerIndex}
+                            />
+                          );
+                        }
+
+                        if (b.type === "exercise_input") {
+                          return (
+                            <ExerciseInput
+                              key={idx}
+                              prompt={b.prompt}
+                              answer={b.answer}
+                              accept={b.accept}
+                            />
+                          );
+                        }
+
+                        return null;
+                      })}
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-sm leading-relaxed text-zinc-600">
+                    В этом уроке нет практики.
+                  </div>
+                )}
+              </div>
+            </Card>
+          ) : null}
+
+          {/* QUIZ */}
+          {step === "quiz" ? (
+            <>
+              {!canOpenQuiz ? (
+                <Card className="rounded-3xl border border-zinc-200/70 bg-white/70 p-6 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl">
+                  <div className="flex items-start gap-3">
+                    <Lock className="mt-0.5 h-5 w-5 text-zinc-500" />
+                    <div>
+                      <div className="text-sm font-semibold text-zinc-900">
+                        Quiz закрыт
+                      </div>
+                      <div className="mt-1 text-sm text-zinc-600">
+                        Сначала отметь Theory и Practice как выполненные.
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ) : (
+                <LessonQuiz
+                  lessonId={lesson.id}
+                  blocks={blocks}
+                  signedIn={userSignedIn}
+                  courseSlug={course.slug}
+                  nextHref={
+                    nextLesson
+                      ? `/lessons/${course.slug}/${nextLesson.slug}`
+                      : null
+                  }
+                />
+              )}
+            </>
+          ) : null}
         </main>
       </div>
     </>
@@ -473,17 +516,15 @@ function StepChip({
       disabled={locked}
       className={cn(
         "inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all",
-        "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300",
-        "hover:bg-zinc-200 dark:hover:bg-zinc-700",
-        active &&
-          "bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-950 shadow-md",
-        locked && "opacity-50 cursor-not-allowed hover:bg-zinc-100"
+        "bg-zinc-100 text-zinc-700 hover:bg-zinc-200",
+        active && "bg-zinc-900 text-white shadow-md",
+        locked && "cursor-not-allowed opacity-50 hover:bg-zinc-100"
       )}
     >
       {icon}
       {title}
-      {done && <CircleCheckBig className="size-4 text-emerald-500" />}
-      {locked && <Lock className="size-4 text-zinc-400" />}
+      {done ? <CircleCheckBig className="size-4 text-emerald-500" /> : null}
+      {locked ? <Lock className="size-4 text-zinc-400" /> : null}
     </button>
   );
 }
@@ -492,13 +533,13 @@ function BlockRenderer({ block }: { block: any }) {
   switch (block.type) {
     case "heading":
       return (
-        <h2 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 mt-6 first:mt-0">
+        <h2 className="mt-6 text-2xl font-semibold tracking-tight text-zinc-900 first:mt-0">
           {block.text}
         </h2>
       );
     case "paragraph":
       return (
-        <p className="text-base leading-7 text-zinc-700 dark:text-zinc-300 whitespace-pre-line">
+        <p className="whitespace-pre-line text-base leading-7 text-zinc-700">
           {block.text}
         </p>
       );
@@ -506,29 +547,27 @@ function BlockRenderer({ block }: { block: any }) {
       return <LessonVideo url={block.url} title={block.title} />;
     case "vocab":
       return (
-        <div className="rounded-3xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/50 p-6">
-          <div className="flex items-center gap-3 text-zinc-950 dark:text-zinc-50">
+        <div className="rounded-3xl border border-zinc-200/70 bg-white/70 p-6 shadow-sm ring-1 ring-zinc-200/50 backdrop-blur-xl">
+          <div className="flex items-center gap-3 text-zinc-900">
             <Zap className="size-5 text-amber-500" />
             <h3 className="text-lg font-semibold">Словарик</h3>
           </div>
+
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {block.items?.map((it: any, i: number) => (
               <div
                 key={i}
-                className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-5 shadow-sm"
+                className="rounded-2xl border border-zinc-200/70 bg-white/80 p-5 shadow-sm"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-semibold text-zinc-950 dark:text-zinc-50">
-                    {it.word}
-                  </span>
-                  {/* ИСПРАВЛЕНО: variant="secondary" -> "muted" */}
+                  <span className="font-semibold text-zinc-900">{it.word}</span>
                   <Badge variant="muted">{it.translation}</Badge>
                 </div>
-                {it.example && (
-                  <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400 italic">
+                {it.example ? (
+                  <p className="mt-3 text-sm italic text-zinc-600">
                     “{it.example}”
                   </p>
-                )}
+                ) : null}
               </div>
             ))}
           </div>
