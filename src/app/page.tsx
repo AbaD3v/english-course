@@ -1,134 +1,77 @@
-"use client";
+import Link from "next/link";
+import { ArrowRight, Sparkles, ShieldCheck, Trophy } from "lucide-react";
 
-import { motion } from "framer-motion";
-import { BookOpen, Target, ChevronRight, PlayCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-// Моковые данные для примера - в будущем будут приходить с сервера
-const courses = [
+const features = [
   {
-    id: 1,
-    title: "English for IT Professionals",
-    description: "Разговорный английский для разработчиков и QA.",
-    progress: 75,
-    lessons: 24,
-    color: "from-blue-500/10 to-indigo-500/10",
+    title: "Structured roadmap",
+    description: "Курсы собраны по уровням и разделены на небольшие уроки с фокусом на практике.",
+    icon: Sparkles,
   },
   {
-    id: 2,
-    title: "Business English Masterclass",
-    description: "Переписка, звонки и презентации на английском.",
-    progress: 30,
-    lessons: 18,
-    color: "from-emerald-500/10 to-teal-500/10",
+    title: "Progress tracking",
+    description: "Сохраняй прогресс, возвращайся к незавершённым темам и контролируй темп обучения.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Certificate-ready",
+    description: "Завершай курс, проходи тесты и получай подтверждение результата.",
+    icon: Trophy,
   },
 ];
 
-export default function DashboardPage() {
+export default function Home() {
   return (
     <div className="space-y-10">
-      {/* Header Section */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-            Главная
-          </h1>
-          <p className="text-zinc-500 mt-1">
-            С возвращением! Продолжайте обучение, где остановились.
+      <section className="noise relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.08] to-white/[0.02] px-6 py-12 shadow-[0_30px_80px_rgba(0,0,0,0.5)] sm:px-10">
+        <div className="absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
+
+        <div className="relative mx-auto max-w-3xl text-center">
+          <p className="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-white/70">
+            English learning platform
           </p>
-        </div>
-        <button className="flex items-center gap-2 rounded-xl bg-zinc-900 dark:bg-zinc-50 px-4 py-2.5 text-sm font-semibold text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-white active:scale-[0.97] transition-all shadow-sm">
-          <BookOpen className="size-4" />
-          Все курсы
-        </button>
-      </div>
+          <h1 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
+            Учите английский в интерфейсе уровня современных SaaS-продуктов
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-base text-white/65 sm:text-lg">
+            Минималистичный дизайн в стиле Vercel: чистая структура, быстрый доступ к курсам,
+            фокус на контенте и предсказуемый UX на каждом шаге.
+          </p>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {[
-          { title: "Активные курсы", value: "2", icon: Target },
-          { title: "Завершено уроков", value: "32", icon: BookOpen },
-          { title: "Средний балл", value: "4.8", icon: Target },
-        ].map((stat, i) => (
-          <motion.div
-            key={stat.title}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="rounded-2xl border border-zinc-200/60 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-sm"
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                {stat.title}
-              </h2>
-              <stat.icon className="size-5 text-zinc-400" />
-            </div>
-            <p className="text-4xl font-semibold mt-4 text-zinc-950 dark:text-zinc-50">
-              {stat.value}
-            </p>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Courses Section */}
-      <div className="space-y-6">
-        <h2 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">
-          Ваши курсы
-        </h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {courses.map((course) => (
-            <motion.div
-              key={course.id}
-              whileHover={{ y: -4 }}
-              className={cn(
-                "group relative rounded-3xl border border-zinc-200/60 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-7 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-lg",
-                "bg-gradient-to-br",
-                course.color
-              )}
+          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href="/courses"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/80 bg-white px-5 py-2.5 text-sm font-medium text-black transition hover:bg-white/90"
             >
-              <div className="flex flex-col h-full justify-between gap-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">
-                    {course.title}
-                  </h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2 line-clamp-2">
-                    {course.description}
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-zinc-950 dark:text-zinc-50">
-                      Прогресс
-                    </span>
-                    <span className="font-semibold text-zinc-950 dark:text-zinc-50">
-                      {course.progress}%
-                    </span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-zinc-200 dark:bg-zinc-700">
-                    <div
-                      className="h-2 rounded-full bg-zinc-900 dark:bg-white transition-all duration-500"
-                      style={{ width: `${course.progress}%` }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {course.lessons} уроков
-                    </span>
-                    <a
-                      href={`/courses/${course.id}`}
-                      className="flex items-center gap-1.5 text-sm font-semibold text-zinc-900 dark:text-zinc-50 group-hover:gap-2.5 transition-all"
-                    >
-                      Продолжить
-                      <ChevronRight className="size-4" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              Начать обучение
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/search"
+              className="inline-flex items-center rounded-xl border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white/85 transition hover:bg-white/10"
+            >
+              Открыть поиск
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        {features.map((item) => {
+          const Icon = item.icon;
+          return (
+            <article
+              key={item.title}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition hover:bg-white/[0.06]"
+            >
+              <div className="mb-4 inline-flex rounded-lg border border-white/20 bg-white/10 p-2">
+                <Icon className="h-4 w-4 text-white/90" />
+              </div>
+              <h2 className="text-lg font-medium text-white">{item.title}</h2>
+              <p className="mt-2 text-sm text-white/60">{item.description}</p>
+            </article>
+          );
+        })}
+      </section>
     </div>
   );
 }
