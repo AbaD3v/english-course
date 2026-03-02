@@ -44,11 +44,11 @@ export default async function RootLayout({
   const activeCourseSlug = getActiveCourseSlugFromPath(pathname);
 
   return (
-    <html lang="ru" className={appFont.variable}>
-      <body className="min-h-screen bg-[#030303] font-sans text-white">
+    <html lang="ru">
+      <body className="min-h-screen bg-[#030303] text-white">
         <AppSidebar activeCourseSlug={activeCourseSlug} pathname={pathname} />
 
-        <div className="min-h-screen lg:pl-[288px]">
+        <div className="lg:pl-[288px] min-h-screen">
           <SiteHeader userEmail={data.user?.email ?? null} />
 
           <main className="min-h-[calc(100vh-64px)]">
@@ -59,9 +59,9 @@ export default async function RootLayout({
 
           <footer className="border-t border-white/10 bg-black/50 backdrop-blur">
             <div className="px-4 sm:px-6 lg:px-10">
-              <div className="mx-auto flex max-w-6xl flex-col gap-2 py-8 text-sm text-white/55 sm:flex-row sm:items-center sm:justify-between">
+              <div className="mx-auto max-w-6xl py-8 text-sm text-white/55 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
                 <span>© {new Date().getFullYear()} EnglishCourse</span>
-                <span className="text-white/35">Modern learning experience • Next.js + Supabase</span>
+                <span className="text-white/35">Built with Next.js + Supabase</span>
               </div>
             </div>
           </footer>
