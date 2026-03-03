@@ -1,41 +1,36 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-
-type Theme = "light" | "dark";
-
-const THEME_KEY = "ec-theme";
-
-function getInitialTheme(): Theme {
-  if (typeof window === "undefined") return "dark";
-  const stored = localStorage.getItem(THEME_KEY);
-  return stored === "light" || stored === "dark" ? stored : "dark";
-}
-
-function applyTheme(theme: Theme) {
-  document.documentElement.classList.toggle("dark", theme === "dark");
-}
+import { useEffect, useState } from 'react';
+import { Sun, Moon } from 'lucide-react';
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    applyTheme(theme);
-    localStorage.setItem(THEME_KEY, theme);
-  }, [theme]);
+    const stored = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const prefers =
+      window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+    const t = stored ?? prefers;
+    setTheme(t);
+    document.documentElement.classList.toggle('dark', t === 'dark');
+  }, []);
+
+  const toggle = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('theme', next);
+    document.documentElement.classList.toggle('dark', next === 'dark');
+  };
 
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      onClick={() => setTheme((prev) => (prev === "dark" ? "light" : "dark"))}
-      className="rounded-xl"
-      aria-label="Переключить тему"
-      title="Переключить тему"
+    <button
+      onClick={toggle}
+      className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+      aria-label="toggle theme"
+      title="Toggle theme"
     >
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </Button>
+      {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+    </button>
   );
 }

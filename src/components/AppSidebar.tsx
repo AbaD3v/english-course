@@ -53,20 +53,20 @@ export async function AppSidebar({
     <aside
       className={cn(
         "fixed left-0 top-0 z-40 h-screen w-[288px] hidden lg:block",
-        "border-r border-zinc-100 dark:border-zinc-800",
-        "bg-white dark:bg-zinc-950 text-zinc-950 dark:text-white",
-        "shadow-sm"
+        "border-r border-zinc-200 dark:border-zinc-800",
+        "bg-white dark:bg-zinc-950",
+        "text-zinc-900 dark:text-zinc-100"
       )}
     >
       <div className="flex h-full flex-col">
         {/* Top */}
-        <div className="px-4 py-5 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="px-4 py-5 border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <div className="text-sm font-semibold tracking-tight">
                 EnglishCourse
               </div>
-              <div className="mt-1 text-sm text-white/55">
+              <div className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
                 Learn • Practice • Quiz
               </div>
             </div>
@@ -78,48 +78,59 @@ export async function AppSidebar({
 
           <button
             className={cn(
-              "mt-4 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 px-3 py-2",
-              "text-left text-sm text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition",
-              "flex items-center gap-2"
+              "mt-4 w-full rounded-xl border",
+              "border-zinc-200 dark:border-zinc-700",
+              "bg-zinc-50 dark:bg-zinc-900",
+              "px-3 py-2 text-left text-sm",
+              "text-zinc-600 dark:text-zinc-300",
+              "hover:bg-zinc-100 dark:hover:bg-zinc-800",
+              "transition flex items-center gap-2"
             )}
           >
             <Search className="h-4 w-4 text-zinc-400" />
             Search…
-            <span className="ml-auto text-xs text-zinc-400">Ctrl K</span>
+            <span className="ml-auto text-xs text-zinc-400">
+              Ctrl K
+            </span>
           </button>
         </div>
 
-        {/* Scroll */}
+        {/* Scrollable */}
         <div className="flex-1 overflow-auto px-3 pb-4 pt-4">
           {/* Courses */}
-          <div className="px-2 pb-2 text-xs font-semibold tracking-wider text-white/45">
+          <div className="px-2 pb-2 text-xs font-semibold tracking-wider text-zinc-500 dark:text-zinc-400">
             COURSES
           </div>
 
           <div className="space-y-1">
             {courses.map((c) => {
               const active = c.slug === activeCourseSlug;
+
               return (
                 <Link
                   key={c.id}
                   href={`/courses/${c.slug}`}
                   className={cn(
-                    "group flex items-center justify-between gap-2 rounded-xl px-3 py-2",
-                    "text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition",
-                    active && "bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-medium"
+                    "group flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-sm transition",
+                    active
+                      ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-medium"
+                      : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                   )}
                 >
                   <div className="min-w-0">
                     <div className="truncate">{c.title}</div>
-                    {c.level ? (
-                      <div className="mt-0.5 text-sm text-white/55">
+                    {c.level && (
+                      <div className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                         {c.level}
                       </div>
-                    ) : null}
+                    )}
                   </div>
 
                   <BookOpen
-                    className={cn("h-4 w-4 text-zinc-400", active && "text-zinc-950 dark:text-white")}
+                    className={cn(
+                      "h-4 w-4 text-zinc-400 transition",
+                      active && "text-zinc-900 dark:text-zinc-100"
+                    )}
                   />
                 </Link>
               );
@@ -127,21 +138,21 @@ export async function AppSidebar({
           </div>
 
           {/* Outline */}
-          <div className="mt-5">
-            <div className="px-2 pb-2 text-xs font-semibold tracking-wider text-white/45">
+          <div className="mt-6">
+            <div className="px-2 pb-2 text-xs font-semibold tracking-wider text-zinc-500 dark:text-zinc-400">
               OUTLINE
             </div>
 
             {!activeCourse ? (
-              <div className="px-3 text-sm text-white/55">
+              <div className="px-3 text-sm text-zinc-500 dark:text-zinc-400">
                 Выбери курс — появится список уроков.
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {modules.map((m) => (
                   <div key={m.title}>
                     <div className="flex items-center justify-between px-2">
-                      <div className="text-sm font-semibold text-white/70">
+                      <div className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                         {m.title}
                       </div>
                       <div className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -162,23 +173,33 @@ export async function AppSidebar({
                             key={l.id}
                             href={`/lessons/${activeCourse.slug}/${l.slug}`}
                             className={cn(
-                              "group flex items-center gap-2 rounded-xl px-3 py-2",
-                              "text-sm transition",
+                              "group flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition",
                               isActiveLesson
-                                ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-medium"
+                                ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-medium"
                                 : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                             )}
                           >
-                            <span className="w-8 shrink-0 text-sm text-white/45">
+                            <span
+                              className={cn(
+                                "w-8 shrink-0 text-xs",
+                                isActiveLesson
+                                  ? "text-zinc-900 dark:text-zinc-100"
+                                  : "text-zinc-500 dark:text-zinc-400"
+                              )}
+                            >
                               {l.order_index}.
                             </span>
-                            <span className="truncate">{l.title}</span>
+
+                            <span className="truncate">
+                              {l.title}
+                            </span>
 
                             <ChevronRight
                               className={cn(
                                 "ml-auto h-4 w-4 text-zinc-400 opacity-0 transition",
                                 "group-hover:opacity-100",
-                                isActiveLesson && "opacity-100 text-zinc-950 dark:text-white"
+                                isActiveLesson &&
+                                  "opacity-100 text-zinc-900 dark:text-zinc-100"
                               )}
                             />
                           </Link>
@@ -192,7 +213,15 @@ export async function AppSidebar({
           </div>
         </div>
 
-        <div className="border-t border-white/10 px-4 py-3 text-sm text-white/55">
+        {/* Bottom */}
+        <div
+          className={cn(
+            "border-t border-zinc-200 dark:border-zinc-800",
+            "px-4 py-3 text-sm",
+            "text-zinc-500 dark:text-zinc-400",
+            "bg-white dark:bg-zinc-950"
+          )}
+        >
           Tip: Ctrl/⌘ + K to search
         </div>
       </div>
@@ -201,25 +230,34 @@ export async function AppSidebar({
 }
 
 function groupLessonsIntoModules(lessons: Lesson[]): ModuleGroup[] {
-  const hasTags = lessons.some((l) => Array.isArray(l.tags) && l.tags.length > 0);
+  const hasTags = lessons.some(
+    (l) => Array.isArray(l.tags) && l.tags.length > 0
+  );
 
   if (hasTags) {
     const map = new Map<string, Lesson[]>();
+
     for (const l of lessons) {
       const key = (l.tags?.[0] ?? "General").trim() || "General";
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(l);
     }
-    return Array.from(map.entries()).map(([title, ls]) => ({ title, lessons: ls }));
+
+    return Array.from(map.entries()).map(([title, ls]) => ({
+      title,
+      lessons: ls,
+    }));
   }
 
   const chunkSize = 5;
   const result: ModuleGroup[] = [];
+
   for (let i = 0; i < lessons.length; i += chunkSize) {
     result.push({
       title: `Module ${Math.floor(i / chunkSize) + 1}`,
       lessons: lessons.slice(i, i + chunkSize),
     });
   }
+
   return result;
 }
