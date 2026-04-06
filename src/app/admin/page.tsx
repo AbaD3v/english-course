@@ -38,29 +38,38 @@ export default async function AdminPage() {
     <main className="min-h-screen bg-zinc-950 text-zinc-100">
       <div className="mx-auto max-w-5xl px-6 py-10 space-y-10">
 
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-1">
-              <GraduationCap className="w-6 h-6 text-amber-400" />
-              <span className="text-xs font-mono uppercase tracking-widest text-zinc-500">Admin Panel</span>
-            </div>
-            <h1 className="text-3xl font-bold tracking-tight">Редактор курсов</h1>
-          </div>
-          <Link
-            href="/admin/lessons/new"
-            className="inline-flex items-center gap-2 rounded-xl bg-amber-400 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-amber-300 transition-colors"
-          >
-            <PlusCircle className="w-4 h-4" />
-            Новый урок
-          </Link>
-<Link
-  href="/admin/courses/new"
-  className="bg-amber-400 px-3 py-2 rounded-xl text-black inline-flex items-center"
->
-  + Новый курс
-</Link>
-        </div>
+        <div className="flex items-center justify-between gap-4">
+  <div>
+    <div className="flex items-center gap-3 mb-1">
+      <GraduationCap className="w-6 h-6 text-amber-400" />
+      <span className="text-xs font-mono uppercase tracking-widest text-zinc-500">
+        Admin Panel
+      </span>
+    </div>
+    <h1 className="text-3xl font-bold tracking-tight">
+      Редактор курсов
+    </h1>
+  </div>
+
+  {/* 👉 ОБЁРТКА ДЛЯ КНОПОК */}
+  <div className="flex items-center gap-2">
+    <Link
+      href="/admin/lessons/new"
+      className="inline-flex items-center gap-2 rounded-xl bg-amber-400 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-amber-300 transition-colors"
+    >
+      <PlusCircle className="w-4 h-4" />
+      Новый урок
+    </Link>
+
+    <Link
+      href="/admin/courses/new"
+      className="inline-flex items-center gap-2 rounded-xl bg-amber-400 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-amber-300 transition-colors"
+    >
+      <PlusCircle className="w-4 h-4" />
+      Новый курс
+    </Link>
+  </div>
+</div>
 
         {/* Courses */}
         {typedCourses.length === 0 ? (
