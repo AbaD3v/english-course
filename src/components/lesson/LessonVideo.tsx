@@ -1,3 +1,4 @@
+// src/components/lesson/LessonVideo.tsx
 "use client";
 
 import { motion } from "framer-motion";

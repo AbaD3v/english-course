@@ -1,3 +1,4 @@
+// src/app/courses/[slug]/loading.tsx
 export default function CourseLoading() {
   return (
     <div className="space-y-6">

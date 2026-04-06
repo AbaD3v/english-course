@@ -18,7 +18,7 @@ export default async function CertificatePage({
   return (
     <main className="max-w-6xl mx-auto p-6 md:p-8 space-y-6">
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" className="rounded-xl">
+        <Button variant="secondary" size="sm" className="rounded-xl">
           <Link href={`/courses/${courseSlug}`} className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" /> Назад к курсу
           </Link>
@@ -40,14 +40,14 @@ export default async function CertificatePage({
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button size="lg" className="rounded-2xl">
+          <Button variant="secondary" size="lg" className="rounded-2xl">
             <a href={`/api/certificate/${courseSlug}?download=1`} className="flex items-center gap-2">
               <Download className="h-4 w-4" /> Скачать PDF
             </a>
           </Button>
 
           {/* Заменен outline на ghost */}
-          <Button variant="ghost" size="lg" className="rounded-2xl">
+          <Button variant="secondary" size="lg" className="rounded-2xl">
             <a href={`/api/certificate/${courseSlug}`} target="_blank" rel="noreferrer" className="flex items-center gap-2">
               <ExternalLink className="h-4 w-4" /> Открыть в новой вкладке
             </a>

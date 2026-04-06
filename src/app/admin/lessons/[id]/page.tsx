@@ -1,26 +1,70 @@
-import { AdminLessonClient } from "@/components/admin/AdminLessonClient";
-import { isCurrentUserAdmin } from "@/lib/admin/auth";
+// src/app/admin/lessons/[id]/page.tsx
+import { notFound, redirect } from "next/navigation";
+import { createSupabaseServer } from "@/lib/supabase/server";
+import LessonEditor from "./LessonEditor";
 
-interface Props {
+type Props = {
   params: Promise<{ id: string }>;
-}
+  searchParams: Promise<{ courseId?: string }>;
+};
 
-export default async function AdminLessonPage({ params }: Props) {
-  const isAdmin = await isCurrentUserAdmin();
-  if (!isAdmin) {
-    return <div className="mx-auto max-w-3xl p-6 text-zinc-200">403 — Admin access required.</div>;
+export default async function LessonEditorPage({ params, searchParams }: Props) {
+  const { id } = await params;
+  const { courseId: queryCourseId } = await searchParams;
+
+  const supabase = await createSupabaseServer();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) redirect("/auth");
+
+  const { data: courses } = await supabase
+    .from("courses")
+    .select("id,title")
+    .order("created_at", { ascending: false });
+
+  const typedCourses = (courses ?? []) as { id: string; title: string }[];
+
+  // New lesson
+  if (id === "new") {
+    return (
+      <LessonEditor
+        initialMeta={{
+          id: null,
+          courseId: queryCourseId ?? typedCourses[0]?.id ?? "",
+          title: "",
+          slug: "",
+          description: "",
+          orderIndex: 1,
+        }}
+        initialBlocks={[]}
+        courses={typedCourses}
+      />
+    );
   }
 
-  const { id } = await params;
-  const now = new Date();
-  const to = now.toISOString().slice(0, 10);
-  const fromDate = new Date(now);
-  fromDate.setDate(now.getDate() - 29);
+  // Edit existing
+  const { data: lesson } = await supabase
+    .from("lessons")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (!lesson) return notFound();
+
+  const content = (lesson.content as any) ?? {};
+  const blocks = content.blocks ?? [];
 
   return (
-    <main className="mx-auto max-w-6xl space-y-6 p-6 text-zinc-100">
-      <h1 className="text-3xl font-semibold">Lesson report: {id}</h1>
-      <AdminLessonClient id={id} initialFrom={fromDate.toISOString().slice(0, 10)} initialTo={to} />
-    </main>
+    <LessonEditor
+      initialMeta={{
+        id: lesson.id,
+        courseId: lesson.course_id,
+        title: lesson.title,
+        slug: lesson.slug,
+        description: lesson.description ?? "",
+        orderIndex: lesson.order_index ?? 1,
+      }}
+      initialBlocks={blocks}
+      courses={typedCourses}
+    />
   );
 }
