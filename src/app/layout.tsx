@@ -1,3 +1,4 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -37,20 +38,28 @@ export const metadata: Metadata = {
 function getActiveCourseSlugFromPath(path: string) {
   const m1 = path.match(/^\/courses\/([^\/?#]+)/);
   if (m1) return m1[1];
-
   const m2 = path.match(/^\/lessons\/([^\/?#]+)\//);
   if (m2) return m2[1];
-
   return null;
 }
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const supabase = await createSupabaseServer();
   const { data } = await supabase.auth.getUser();
+  const user = data.user;
+
+  // Проверяем роль из таблицы profiles
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    isAdmin = profile?.role === "admin";
+  }
 
   const h = await headers();
   const pathname = h.get("x-pathname") ?? "";
@@ -73,7 +82,10 @@ export default async function RootLayout({
         <AppSidebar activeCourseSlug={activeCourseSlug} pathname={pathname} />
 
         <div className="lg:pl-[288px] min-h-screen flex flex-col">
-          <SiteHeader userEmail={data.user?.email ?? null} />
+          <SiteHeader
+            userEmail={user?.email ?? null}
+            isAdmin={isAdmin}
+          />
 
           <main className="min-h-[calc(100vh-64px)] flex-1">
             <div className="px-4 sm:px-6 lg:px-10">

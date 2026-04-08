@@ -1,4 +1,5 @@
 {
+  
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -11,6 +12,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    
     "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
@@ -22,6 +24,7 @@
 "paths": {
       "@/*": ["src/*"]
     }
+    
   },
   "include": [
     "next-env.d.ts",
@@ -31,5 +34,6 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
+  
   "exclude": ["node_modules"]
 }

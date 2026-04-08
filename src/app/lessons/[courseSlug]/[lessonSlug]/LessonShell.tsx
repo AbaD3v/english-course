@@ -1,3 +1,4 @@
+// src/app/lessons/[courseSlug]/[lessonSlug]/LessonShell.tsx
 "use client";
 
 import Link from "next/link";
