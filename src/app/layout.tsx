@@ -6,7 +6,6 @@ import { createSupabaseServer } from "@/lib/supabase/server";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Toaster } from "sonner";
 import { AppSidebar } from "@/components/AppSidebar";
-import { headers } from "next/headers";
 import { AppFooter } from "@/components/layout/AppFooter";
 import { PageTransition } from "@/components/layout/PageTransition";
 
@@ -35,14 +34,6 @@ export const metadata: Metadata = {
   },
 };
 
-function getActiveCourseSlugFromPath(path: string) {
-  const m1 = path.match(/^\/courses\/([^\/?#]+)/);
-  if (m1) return m1[1];
-  const m2 = path.match(/^\/lessons\/([^\/?#]+)\//);
-  if (m2) return m2[1];
-  return null;
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -50,7 +41,6 @@ export default async function RootLayout({
   const { data } = await supabase.auth.getUser();
   const user = data.user;
 
-  // Проверяем роль из таблицы profiles
   let isAdmin = false;
   if (user) {
     const { data: profile } = await supabase
@@ -60,10 +50,6 @@ export default async function RootLayout({
       .single();
     isAdmin = profile?.role === "admin";
   }
-
-  const h = await headers();
-  const pathname = h.get("x-pathname") ?? "";
-  const activeCourseSlug = getActiveCourseSlugFromPath(pathname);
 
   return (
     <html lang="ru" suppressHydrationWarning>
@@ -79,9 +65,11 @@ export default async function RootLayout({
             })();`,
           }}
         />
-        <AppSidebar activeCourseSlug={activeCourseSlug} pathname={pathname} />
 
-        <div className="lg:pl-[288px] min-h-screen flex flex-col">
+        {/* Сайдбар теперь клиентский — пропсы не нужны */}
+        <AppSidebar />
+
+        <div className="lg:pl-[272px] min-h-screen flex flex-col">
           <SiteHeader
             userEmail={user?.email ?? null}
             isAdmin={isAdmin}
