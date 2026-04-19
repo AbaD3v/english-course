@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 import { ExerciseMCQ } from "@/components/exercises/ExerciseMCQ";
 import { ExerciseInput } from "@/components/exercises/ExerciseInput";
+import { ExercisePronunciation } from "@/components/exercises/ExercisePronunciation";
 
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -38,7 +39,13 @@ type InputBlock = {
   accept?: string[];
 };
 
-type Block = MCQBlock | InputBlock | { type: string; [key: string]: any };
+type PronunciationBlock = {
+  type: "exercise_pronunciation";
+  prompt: string;
+  phrase: string;
+};
+
+type Block = MCQBlock | InputBlock | PronunciationBlock | { type: string; [key: string]: any };
 
 export function LessonQuiz({
   lessonId,
@@ -326,6 +333,24 @@ export function LessonQuiz({
                   prompt={ex.prompt}
                   answer={ex.answer}
                   accept={ex.accept}
+                  onResult={(ok: boolean) => setResult(idx, ok)}
+                />
+              </motion.div>
+            );
+          }
+
+          if (b.type === "exercise_pronunciation") {
+            const ex = b as PronunciationBlock;
+            return (
+              <motion.div
+                key={`pronunciation-${idx}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, delay: Math.min(idx * 0.04, 0.25) }}
+              >
+                <ExercisePronunciation
+                  prompt={ex.prompt}
+                  phrase={ex.phrase}
                   onResult={(ok: boolean) => setResult(idx, ok)}
                 />
               </motion.div>

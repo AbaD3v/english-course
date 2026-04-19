@@ -10,12 +10,15 @@ import {
   Sparkles,
   Copy,
   Eye,
+  Mic,
+  MicOff,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/components/ui/cn";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
 
 function normalize(s: string) {
   return s.trim().toLowerCase().replace(/\s+/g, " ");
@@ -29,13 +32,28 @@ export function ExerciseInput({
 }: {
   prompt: string;
   answer: string;
-  accept?: string[]; // альтернативные ответы
+  accept?: string[];
   onResult?: (correct: boolean) => void;
 }) {
   const [value, setValue] = useState("");
   const [checked, setChecked] = useState(false);
   const [shake, setShake] = useState(false);
   const [reveal, setReveal] = useState(false);
+
+  // ── Голосовой ввод ──────────────────────────────────────────
+  const { isListening, isSupported, startListening, stopListening } =
+    useVoiceInput({
+      language: "en-US",
+      onResult: (transcript) => {
+        if (!checked) setValue(transcript);
+      },
+    });
+
+  function toggleMic() {
+    if (isListening) stopListening();
+    else startListening();
+  }
+  // ────────────────────────────────────────────────────────────
 
   const correct = useMemo(() => {
     const v = normalize(value);
@@ -112,11 +130,13 @@ export function ExerciseInput({
               className={cn(
                 "rounded-2xl border border-app bg-soft backdrop-blur",
                 checked && correct && "border-emerald-500/50 bg-emerald-500/10",
-                checked && !correct && "border-red-500/50 bg-red-500/10"
+                checked && !correct && "border-red-500/50 bg-red-500/10",
+                isListening && "border-red-400/60 bg-red-500/5"
               )}
             >
               <div className="flex items-center gap-2 px-4 py-3">
-                <Sparkles className="h-4 w-4 text-secondary" />
+                <Sparkles className="h-4 w-4 shrink-0 text-secondary" />
+
                 <input
                   value={value}
                   onChange={(e) => !checked && setValue(e.target.value)}
@@ -128,9 +148,38 @@ export function ExerciseInput({
                     "w-full bg-transparent text-base text-primary outline-none placeholder:text-secondary",
                     "disabled:cursor-not-allowed"
                   )}
-                  placeholder="Type your answer…"
+                  placeholder={
+                    isListening ? "Слушаю…" : "Type your answer…"
+                  }
                   aria-label="Answer input"
                 />
+
+                {/* Кнопка микрофона */}
+                {isSupported && !checked && (
+                  <button
+                    type="button"
+                    onClick={toggleMic}
+                    title={isListening ? "Остановить запись" : "Говорить"}
+                    className={cn(
+                      "relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all",
+                      isListening
+                        ? "border-red-400 bg-red-500/10 text-red-400"
+                        : "border-app bg-transparent text-secondary hover:border-secondary hover:text-primary"
+                    )}
+                  >
+                    {isListening ? (
+                      <>
+                        <MicOff className="h-4 w-4" />
+                        {/* пульсирующая точка */}
+                        <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-red-500">
+                          <span className="absolute inset-0 animate-ping rounded-full bg-red-400 opacity-75" />
+                        </span>
+                      </>
+                    ) : (
+                      <Mic className="h-4 w-4" />
+                    )}
+                  </button>
+                )}
 
                 <Badge variant="muted" className="hidden sm:inline-flex">
                   Enter
@@ -140,7 +189,9 @@ export function ExerciseInput({
 
             {!checked ? (
               <div className="mt-2 text-sm text-secondary">
-                Подсказка: без лишних пробелов — мы нормализуем ввод.
+                {isListening
+                  ? "Говори по-английски — текст появится автоматически."
+                  : "Подсказка: без лишних пробелов — мы нормализуем ввод."}
               </div>
             ) : null}
           </div>
@@ -191,13 +242,9 @@ export function ExerciseInput({
             <div className="text-sm text-secondary">
               {checked ? (
                 correct ? (
-                  <span className="font-medium text-emerald-700">
-                    Правильно ✅
-                  </span>
+                  <span className="font-medium text-emerald-700">Правильно ✅</span>
                 ) : (
-                  <span className="font-medium text-red-700">
-                    Неправильно ❌
-                  </span>
+                  <span className="font-medium text-red-700">Неправильно ❌</span>
                 )
               ) : value.trim() ? (
                 "Можно проверять"
@@ -229,15 +276,13 @@ export function ExerciseInput({
                       {Array.isArray(accept) && accept.length ? (
                         <div className="mt-2 text-sm text-secondary">
                           Также принимается:{" "}
-                          <span className="text-secondary">
-                            {accept.join(", ")}
-                          </span>
+                          <span className="text-secondary">{accept.join(", ")}</span>
                         </div>
                       ) : null}
                     </>
                   ) : (
                     <div className="mt-1 text-sm text-secondary">
-                      Нажми “Показать”, чтобы увидеть ответ.
+                      Нажми "Показать", чтобы увидеть ответ.
                     </div>
                   )}
                 </div>
